@@ -124,19 +124,17 @@ public class Model extends Observable {
                 }
                 if (board.tile(i, highest) == null) {
                     board.move(i, highest, t);
-                    changed = true;
                 } else {
                     if (board.tile(i, highest).value() == t.value()) {
                         board.move(i, highest, t);
                         score += board.tile(i, highest).value();
                         highest -= 1;
-                        changed = true;
                     } else {
                         highest -= 1;
                         board.move(i, highest, t);
-                        changed = true;
                     }
                 }
+                changed = true;
             }
         }
         board.setViewingPerspective(Side.NORTH);
