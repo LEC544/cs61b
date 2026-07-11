@@ -1,0 +1,101 @@
+package deque;
+
+public class LinkedListDeque<T> {
+
+    private class LinkedListNode<T> {
+        private T content;
+        private LinkedListNode<T> front;
+        private LinkedListNode<T> next;
+
+        private LinkedListNode() {
+            content = null;
+            front = null;
+            next = null;
+        }
+        private LinkedListNode(T item) {
+            content = item;
+            front = null;
+            next = null;
+        }
+    }
+
+
+    private int size;
+    private LinkedListNode<T> end;
+    private LinkedListNode<T> start;
+    public LinkedListDeque() {
+        size = 0;
+        end = new LinkedListNode<>();
+        start = new LinkedListNode<>();
+        end.front = start;
+        start.next = end;
+    }
+
+    public void addFirst(T item) {
+        size += 1;
+        LinkedListNode<T> t = new LinkedListNode<>(item);
+        t.front = start;
+        t.next = start.next;
+        start.next.front = t;
+        start.next = t;
+    }
+
+    public void addLast(T item) {
+        size += 1;
+        LinkedListNode<T> t = new LinkedListNode<>(item);
+        t.front = end.front;
+        t.next = end;
+        end.front.next = t;
+        end.front = t;
+    }
+
+    public boolean isEmpty() {
+        return start.next == end;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public void printDeque() {
+        LinkedListNode<T> p = start.next;
+        while (p != end) {
+            System.out.print(p.content + " ");
+            p = p.next;
+        }
+        System.out.println();
+    }
+
+    public T removeFirst() {
+        if (isEmpty())
+            return null;
+        LinkedListNode<T> p = start.next;
+        T res = p.content;
+        start.next = p.next;
+        p.next.front = start;
+        size -= 1;
+        return res;
+    }
+
+    public T removeLast() {
+        if (isEmpty())
+            return null;
+        LinkedListNode<T> p = end.front;
+        T res = p.content;
+        end.front = p.front;
+        p.front.next = end;
+        size -= 1;
+        return res;
+    }
+
+    public T get(int index) {
+        if (index >= size) {
+            return null;
+        }
+        LinkedListNode<T>  p = start.next;
+        for (int i = 0; i < index; i += 1) {
+            p = p.next;
+        }
+        return p.content;
+    }
+}
