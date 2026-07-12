@@ -127,4 +127,27 @@ public class LinkedListDequeTest {
         }
 
     }
+
+    @Test
+    public void TestGet() {
+        LinkedListDeque<Integer> lld = new LinkedListDeque<>();
+        lld.addLast(5);
+        lld.addLast(2);
+        lld.addLast(232);
+        Integer getcontenx = lld.get(2);
+        assertEquals(232, (int)getcontenx);
+        assertNull(lld.get(20));
+        assertNull(lld.get(-1));
+    }
+    @Test
+    public void TestGetrecursive() {
+        LinkedListDeque<Integer> lld = new LinkedListDeque<>();
+        lld.addLast(5);
+        lld.addLast(2);
+        lld.addLast(232);
+        Integer getcontenx = lld.getRecurive(2);
+        assertEquals(232, (int)getcontenx);
+        assertNull(lld.getRecurive(20));
+        assertNull(lld.getRecurive(-1));
+    }
 }

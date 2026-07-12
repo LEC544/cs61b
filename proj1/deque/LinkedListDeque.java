@@ -2,10 +2,10 @@ package deque;
 
 public class LinkedListDeque<T> {
 
-    private class LinkedListNode<T> {
+    private class LinkedListNode{
         private T content;
-        private LinkedListNode<T> front;
-        private LinkedListNode<T> next;
+        private LinkedListNode front;
+        private LinkedListNode next;
 
         private LinkedListNode() {
             content = null;
@@ -17,23 +17,33 @@ public class LinkedListDeque<T> {
             front = null;
             next = null;
         }
+        private T getrecurive(int index) {
+            if (index < 0 || index >= size) {
+                return null;
+            }
+            if (index == 0) {
+                return content;
+            } else {
+                return next.getrecurive(index - 1);
+            }
+        }
     }
 
 
     private int size;
-    private LinkedListNode<T> end;
-    private LinkedListNode<T> start;
+    private LinkedListNode end;
+    private LinkedListNode start;
     public LinkedListDeque() {
         size = 0;
-        end = new LinkedListNode<>();
-        start = new LinkedListNode<>();
+        end = new LinkedListNode();
+        start = new LinkedListNode();
         end.front = start;
         start.next = end;
     }
 
     public void addFirst(T item) {
         size += 1;
-        LinkedListNode<T> t = new LinkedListNode<>(item);
+        LinkedListNode t = new LinkedListNode(item);
         t.front = start;
         t.next = start.next;
         start.next.front = t;
@@ -42,7 +52,7 @@ public class LinkedListDeque<T> {
 
     public void addLast(T item) {
         size += 1;
-        LinkedListNode<T> t = new LinkedListNode<>(item);
+        LinkedListNode t = new LinkedListNode(item);
         t.front = end.front;
         t.next = end;
         end.front.next = t;
@@ -50,7 +60,7 @@ public class LinkedListDeque<T> {
     }
 
     public boolean isEmpty() {
-        return start.next == end;
+        return size == 0;
     }
 
     public int size() {
@@ -58,7 +68,7 @@ public class LinkedListDeque<T> {
     }
 
     public void printDeque() {
-        LinkedListNode<T> p = start.next;
+        LinkedListNode p = start.next;
         while (p != end) {
             System.out.print(p.content + " ");
             p = p.next;
@@ -69,7 +79,7 @@ public class LinkedListDeque<T> {
     public T removeFirst() {
         if (isEmpty())
             return null;
-        LinkedListNode<T> p = start.next;
+        LinkedListNode p = start.next;
         T res = p.content;
         start.next = p.next;
         p.next.front = start;
@@ -80,7 +90,7 @@ public class LinkedListDeque<T> {
     public T removeLast() {
         if (isEmpty())
             return null;
-        LinkedListNode<T> p = end.front;
+        LinkedListNode p = end.front;
         T res = p.content;
         end.front = p.front;
         p.front.next = end;
@@ -89,13 +99,18 @@ public class LinkedListDeque<T> {
     }
 
     public T get(int index) {
-        if (index >= size) {
+        if (index >= size || index < 0) {
             return null;
         }
-        LinkedListNode<T>  p = start.next;
+        LinkedListNode  p = start.next;
         for (int i = 0; i < index; i += 1) {
             p = p.next;
         }
         return p.content;
+    }
+
+    public T getRecurive(int index) {
+        LinkedListNode p = start.next;
+        return p.getrecurive(index);
     }
 }
