@@ -3,10 +3,10 @@ package deque;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class ArreyDequeTest {
+public class ArrayDequeTest {
     @Test
     public void addTest() {
-        ArreyDeque<Integer> a = new ArreyDeque<>();
+        ArrayDeque<Integer> a = new ArrayDeque<>();
         a.addFirst(2);
         a.addLast(4);
         a.addLast(44);
