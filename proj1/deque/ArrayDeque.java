@@ -4,12 +4,12 @@ import jh61b.junit.In;
 
 public class ArrayDeque<T> {
 
-    private T[] arrey;
+    private T[] array;
     private int size;
     private int start;
     private int end;
     public ArrayDeque() {
-        arrey = (T[]) new Object[8];
+        array = (T[]) new Object[8];
         size = 0;
         start = 0;
         end = 1;
@@ -20,8 +20,8 @@ public class ArrayDeque<T> {
         for (int i = 0; i < size; i += 1) {
             a[i] = get(i);
         }
-        arrey = a;
-        start = Math.floorMod(-1, arrey.length);
+        array = a;
+        start = Math.floorMod(-1, array.length);
         end = size;
     }
 
@@ -41,52 +41,52 @@ public class ArrayDeque<T> {
     }
 
     public void addFirst(T item) {
-        if (size == arrey.length) {
-            resize(arrey.length * 2);
+        if (size == array.length) {
+            resize(array.length * 2);
         }
-        arrey[start] = item;
-        start = Math.floorMod((start - 1), arrey.length);
+        array[start] = item;
+        start = Math.floorMod((start - 1), array.length);
         size += 1;
     }
 
     public void addLast(T item) {
-        if (size == arrey.length) {
-            resize(arrey.length * 2);
+        if (size == array.length) {
+            resize(array.length * 2);
         }
-        arrey[end] = item;
-        end = Math.floorMod(end + 1, arrey.length);
+        array[end] = item;
+        end = Math.floorMod(end + 1, array.length);
         size += 1;
     }
     public T get(int Index) {
         if (Index < 0 || Index >= size) {
             return null;
         } else {
-            return arrey[(start + Index + 1) % arrey.length];
+            return array[(start + Index + 1) % array.length];
         }
     }
 
     public T removeFirst() {
-        if (size < 0)
+        if (isEmpty())
             return null;
-        int next_start = Math.floorMod(start + 1, arrey.length);
-        T res = arrey[next_start];
+        int next_start = Math.floorMod(start + 1, array.length);
+        T res = array[next_start];
         size -= 1;
         start = next_start;
-        if (size <= arrey.length / 4) {
-            resize(arrey.length / 4);
+        if (size <= array.length / 4 && array.length >= 8) {
+            resize(array.length / 4);
         }
         return res;
     }
 
     public T removeLast() {
-        if (size < 0)
+        if (isEmpty())
             return null;
-        int next_end = Math.floorMod(end - 1, arrey.length);
-        T res = arrey[next_end];
+        int next_end = Math.floorMod(end - 1, array.length);
+        T res = array[next_end];
         size -= 1;
         end = next_end;
-        if (size <= arrey.length / 4) {
-            resize(arrey.length / 4);
+        if (size <= array.length / 4 && array.length >= 8) {
+            resize(array.length / 4);
         }
         return res;
     }

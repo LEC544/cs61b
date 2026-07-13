@@ -19,6 +19,8 @@ public class ArrayDequeTest {
         a.addLast(455);
         assertEquals(45,(int) a.get(0));
         assertEquals(a.size(), 9);
+        a.printDeque();
+        a.removeFirst();
         a.removeLast();
         a.removeLast();
         a.removeLast();
@@ -26,6 +28,49 @@ public class ArrayDequeTest {
         a.removeLast();
         a.removeLast();
         a.removeLast();
+        a.removeLast();
+        a.removeLast();
+        a.removeLast();
+        a.removeLast();
+        a.removeLast();
+        a.removeLast();
+        a.removeLast();
+        a.removeLast();
+        a.printDeque();
+    }
 
+    @Test
+    public void getTest() {
+        ArrayDeque<Integer> a = new ArrayDeque<>();
+        for (int i = 0; i < 1000; i += 1) {
+            a.addLast(i);
+        }
+        for (int i = 0; i < 1000; i += 1) {
+            assertEquals(i, (int) a.get(i));
+        }
+    }
+
+    @Test
+    public void removeEmptyTest() {
+        ArrayDeque<Integer> a = new ArrayDeque<>();
+        assertNull(a.removeFirst());
+        assertNull(a.removeLast());
+    }
+
+    @Test
+    /* Check if you can create ArreyDeques with different parameterized types*/
+    public void multipleParamTest() {
+
+        ArrayDeque<String>  lld1 = new ArrayDeque<String>();
+        ArrayDeque<Double>  lld2 = new ArrayDeque<Double>();
+        ArrayDeque<Boolean> lld3 = new ArrayDeque<Boolean>();
+
+        lld1.addFirst("string");
+        lld2.addFirst(3.14159);
+        lld3.addFirst(true);
+
+        String s = lld1.removeFirst();
+        double d = lld2.removeFirst();
+        boolean b = lld3.removeFirst();
     }
 }
