@@ -73,4 +73,30 @@ public class ArrayDequeTest {
         double d = lld2.removeFirst();
         boolean b = lld3.removeFirst();
     }
+
+    @Test
+    public void IteratorTest() {
+        ArrayDeque<Integer> lld = new ArrayDeque<>();
+        lld.addLast(32);
+        lld.addLast(43);
+        lld.addLast(56);
+        for (int x : lld) {
+            System.out.print(x + " ");
+        }
+    }
+
+    @Test
+    public void equalsTest() {
+        ArrayDeque<Integer> lld = new ArrayDeque<>();
+        lld.addLast(32);
+        lld.addLast(43);
+        lld.addLast(56);
+        ArrayDeque<Integer> lld2 = new ArrayDeque<>();
+        lld2.addLast(32);
+        lld2.addLast(43);
+        lld2.addLast(56);
+        assertTrue(lld.equals(lld2));
+        lld2.addLast(324);
+        assertFalse(lld.equals(lld2));
+    }
 }
