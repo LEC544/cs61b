@@ -21,7 +21,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         }
         array = a;
         start = Math.floorMod(-1, array.length);
-        end = size;
+        end = size % array.length;
     }
 
     public int size() {
@@ -115,8 +115,15 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
 
     @Override
     public boolean equals(Object object) {
-        if (object == null) { return false; }
-        if (!(object instanceof ArrayDeque)) { return false; }
+        if (object == null) {
+            return false;
+        }
+        if (object == this) {
+            return true;
+        }
+        if (!(object instanceof ArrayDeque)) {
+            return false;
+        }
         ArrayDeque<T> o = (ArrayDeque<T>) object;
         if (o.size == this.size) {
             for (int i = 0; i < size; i += 1) {
@@ -125,7 +132,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
                 }
             }
             return true;
-        } else { return false; }
-
+        } else {
+            return false;
+        }
     }
 }

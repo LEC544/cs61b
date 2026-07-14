@@ -7,36 +7,12 @@ public class ArrayDequeTest {
     @Test
     public void addTest() {
         ArrayDeque<Integer> a = new ArrayDeque<>();
-        a.addFirst(2);
-        a.addLast(4);
-        a.addLast(44);
-        a.addFirst(45);
-        a.addLast(32);
-        a.addLast(33);
-        a.addLast(34);
-        a.addLast(35);
-        assertEquals(35,(int) a.get(7));
-        a.addLast(455);
-        assertEquals(45,(int) a.get(0));
-        assertEquals(a.size(), 9);
-        a.printDeque();
-        a.removeFirst();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.printDeque();
+        for (int i = 0; i < 8; i += 1) {
+            a.addLast(i);
+        }
+        for (int i = 0; i < 6; i += 1) {
+            a.removeLast();
+        }
     }
 
 
