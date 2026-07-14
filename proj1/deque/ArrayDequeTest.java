@@ -38,6 +38,26 @@ public class ArrayDequeTest {
         a.removeLast();
         a.printDeque();
     }
+    @Test
+    public void addTest2() {
+        MaxArrayDeque<Integer> a = new MaxArrayDeque<>();
+        a.addLast(0);
+        a.addLast(1);
+        a.addLast(2);
+        a.addLast(3);
+        a.addLast(4);
+        a.get(4);
+        a.addFirst(6);
+        a.removeLast();
+        a.removeFirst();
+        a.get(3);
+        a.addLast(10);
+        a.removeFirst();
+        a.removeFirst();
+        a.removeLast();
+        a.removeFirst();
+        a.addLast(15);
+    }
 
     @Test
     public void getTest() {

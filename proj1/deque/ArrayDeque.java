@@ -1,8 +1,7 @@
 package deque;
-import java.util.*;
-import jh61b.junit.In;
+import java.util.Iterator;
 
-public class ArrayDeque<T> implements Iterable<T>{
+public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
 
     private T[] array;
     private int size;
