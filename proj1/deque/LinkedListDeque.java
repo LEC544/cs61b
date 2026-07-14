@@ -130,7 +130,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return p.content;
     }
 
-    public T getRecurive(int index) {
+    public T getRecursive(int index) {
         LinkedListNode p = start.next;
         return p.getrecurive(index);
     }

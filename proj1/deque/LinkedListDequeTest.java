@@ -145,9 +145,9 @@ public class LinkedListDequeTest {
         lld.addLast(5);
         lld.addLast(2);
         lld.addLast(232);
-        Integer getcontenx = lld.getRecurive(2);
+        Integer getcontenx = lld.getRecursive(2);
         assertEquals(232, (int)getcontenx);
-        assertNull(lld.getRecurive(20));
-        assertNull(lld.getRecurive(-1));
+        assertNull(lld.getRecursive(20));
+        assertNull(lld.getRecursive(-1));
     }
 }
