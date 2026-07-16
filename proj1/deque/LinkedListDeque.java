@@ -50,14 +50,13 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
     }
 
-
     private int size;
-    private LinkedListNode end;
-    private LinkedListNode start;
+    private LinkedListNode start;   //sentinel start
+    private LinkedListNode end;     //sentinel end
     public LinkedListDeque() {
         size = 0;
-        end = new LinkedListNode();
         start = new LinkedListNode();
+        end = new LinkedListNode();
         end.front = start;
         start.next = end;
     }
@@ -95,8 +94,9 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     public T removeFirst() {
-        if (isEmpty())
+        if (isEmpty()) {
             return null;
+        }
         LinkedListNode p = start.next;
         T res = p.content;
         start.next = p.next;
@@ -106,8 +106,9 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     public T removeLast() {
-        if (isEmpty())
+        if (isEmpty()) {
             return null;
+        }
         LinkedListNode p = end.front;
         T res = p.content;
         end.front = p.front;
@@ -148,15 +149,14 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             return false;
         }
         Deque<T> o = (Deque<T>) object;
-        if (o.size() == this.size) {
-            for (int i = 0; i < size; i += 1) {
-                if (! this.get(i).equals(o.get(i))) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
+        if (o.size() != this.size()) {
             return false;
         }
+        for (int i = 0; i < this.size(); i += 1) {
+            if (!o.get(i).equals(this.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

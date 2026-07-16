@@ -20,7 +20,15 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
             a[i] = get(i);
         }
         array = a;
+        /*
+        * if the length is 16, start is 15
+        * move start to the last index of the list
+        * */
         start = Math.floorMod(-1, array.length);
+        /*
+        * if enlarged, end equals to size.
+        * if shrunk, end equals to 0, cause if shrunk, size equals to length.
+        * */
         end = size % array.length;
     }
 
@@ -41,7 +49,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         return new ArrayDequeIterator();
     }
 
-    private class ArrayDequeIterator implements Iterator<T>{
+    private class ArrayDequeIterator implements Iterator<T> {
 
         private int pos;
 
@@ -79,21 +87,22 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         end = Math.floorMod(end + 1, array.length);
         size += 1;
     }
-    public T get(int Index) {
-        if (Index < 0 || Index >= size) {
+    public T get(int index) {
+        if (index < 0 || index >= size) {
             return null;
         } else {
-            return array[(start + Index + 1) % array.length];
+            return array[(start + 1 + index) % array.length]; // start + 1 point to the first item
         }
     }
 
     public T removeFirst() {
-        if (isEmpty())
+        if (isEmpty()) {
             return null;
-        int next_start = Math.floorMod(start + 1, array.length);
-        T res = array[next_start];
+        }
+        int nextStart = Math.floorMod(start + 1, array.length);
+        T res = array[nextStart];
         size -= 1;
-        start = next_start;
+        start = nextStart;
         if (size <= array.length / 4 && array.length >= 8) {
             resize(array.length / 4);
         }
@@ -101,12 +110,13 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     }
 
     public T removeLast() {
-        if (isEmpty())
+        if (isEmpty()) {
             return null;
-        int next_end = Math.floorMod(end - 1, array.length);
-        T res = array[next_end];
+        }
+        int nextEnd = Math.floorMod(end - 1, array.length);
+        T res = array[nextEnd];
         size -= 1;
-        end = next_end;
+        end = nextEnd;
         if (size <= array.length / 4 && array.length >= 8) {
             resize(array.length / 4);
         }
@@ -125,15 +135,14 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
             return false;
         }
         Deque<T> o = (Deque<T>) object;
-        if (o.size() == this.size()) {
-            for (int i = 0; i < this.size(); i += 1) {
-                if (! this.get(i).equals(o.get(i))) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
+        if (o.size() != this.size()) {
             return false;
         }
+        for (int i = 0; i < this.size(); i += 1) {
+            if (!this.get(i).equals(o.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

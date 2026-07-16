@@ -1,6 +1,9 @@
 package deque;
 
 import org.junit.Test;
+
+import java.beans.IntrospectionException;
+
 import static org.junit.Assert.*;
 
 public class ArrayDequeTest {
@@ -75,5 +78,16 @@ public class ArrayDequeTest {
         assertTrue(lld.equals(lld2));
         lld2.addLast(324);
         assertFalse(lld.equals(lld2));
+        LinkedListDeque<Integer> lld3 = new LinkedListDeque<>();
+        ArrayDeque<Integer> lld1 = new ArrayDeque<>();
+        assertTrue(lld1.equals(lld3));
+        assertFalse(lld.equals(lld3));
+        lld3.addLast(32);
+        lld3.addLast(43);
+        lld3.addLast(56);
+        assertTrue(lld.equals(lld3));
+        lld3.addLast(null);
+        assertFalse(lld.equals(lld3));
     }
+
 }
