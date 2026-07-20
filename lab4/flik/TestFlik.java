@@ -5,8 +5,8 @@ import org.junit.*;
 public class TestFlik {
     @Test
     public void Test() {
-        int i = 10;
-        int j = 10;
+        int i = 128;
+        int j = 128;
         Assert.assertTrue(Flik.isSameNumber(i, j));
     }
 }
