@@ -24,6 +24,63 @@ public class Repository {
     public static final File CWD = new File(System.getProperty("user.dir"));
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
+    public static final File OBJECT = join(GITLET_DIR, "object");
+    public static final File INDEX = join(GITLET_DIR, "index");
+    public static final File HEAD = join(GITLET_DIR, "head");
+    public static final File BRANCH = join(GITLET_DIR, "branches");
+    public static final File REFS = join(GITLET_DIR, "refs");
+
 
     /* TODO: fill in the rest of this class. */
+
+    public static void createRepository() {
+        GITLET_DIR.mkdir();
+        OBJECT.mkdir();
+        BRANCH.mkdir();
+        REFS.mkdir();
+        try {
+            HEAD.createNewFile();
+            INDEX.createNewFile();
+        } catch (Exception ignore) {
+
+        }
+    }
+
+    public static File makeObject(String object) {
+        String uid = sha1(object);
+        File compressionPath = join(Repository.OBJECT, uid.substring(0, 2));
+        if (!compressionPath.exists()) {
+            compressionPath.mkdir();
+        }
+        File Object = join(compressionPath, uid.substring(2));
+        if (Object.exists()) {
+            MainMethods.exit("nothing change");
+        }
+        try {
+            Object.createNewFile();
+        } catch (Exception ignore) {
+
+        }
+        return  Object;
+    }
+
+    public static Blobs findBlob(String blobName) {
+        File blobDir = join(OBJECT, blobName.substring(0, 2));
+        File blobFile = join(blobDir, blobName.substring(2));
+        Blobs b = readObject(blobFile, Blobs.class);
+        return b;
+    }
+
+    public static Commit findCommit(String commitName) {
+        File commitDir = join(OBJECT, commitName.substring(0, 2));
+        File commitFile = join(commitDir,commitName.substring(2));
+        Commit c = readObject(commitFile, Commit.class);
+        return c;
+    }
+
+    public static Branch findBranch(String branchName) {
+        File branchFile = join(BRANCH, branchName);
+        Branch b = readObject(branchFile, Branch.class);
+        return b;
+    }
 }
