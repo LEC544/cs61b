@@ -54,7 +54,7 @@ public class Repository {
         }
         File Object = join(compressionPath, uid.substring(2));
         if (Object.exists()) {
-            MainMethods.exit("nothing change");
+            return Object;
         }
         try {
             Object.createNewFile();
@@ -67,6 +67,9 @@ public class Repository {
     public static Blobs findBlob(String blobName) {
         File blobDir = join(OBJECT, blobName.substring(0, 2));
         File blobFile = join(blobDir, blobName.substring(2));
+        if (!blobFile.exists()) {
+            throw new GitletException("Can't Find This File");
+        }
         Blobs b = readObject(blobFile, Blobs.class);
         return b;
     }
@@ -74,6 +77,9 @@ public class Repository {
     public static Commit findCommit(String commitName) {
         File commitDir = join(OBJECT, commitName.substring(0, 2));
         File commitFile = join(commitDir,commitName.substring(2));
+        if (!commitFile.exists()) {
+            throw new GitletException("Can't Find This Branch");
+        }
         Commit c = readObject(commitFile, Commit.class);
         return c;
     }

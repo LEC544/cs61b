@@ -37,6 +37,11 @@ public class Index implements Serializable {
         return hashMap;
     }
 
+    public static boolean isChanged() {
+        Index i = readObject(Repository.INDEX, Index.class);
+        return !i.getAddIndex().isEmpty() || !i.getRemoveIndex().isEmpty();
+    }
+
     public HashMap<String, String> getAddIndex() {
         return addIndex;
     }

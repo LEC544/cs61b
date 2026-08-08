@@ -56,6 +56,9 @@ public class MainMethods {
             exit("must inited");
         }
         corretArgumentNumber(2, args.length);
+        if (!Index.isChanged()) {
+            exit("didn't change");
+        }
         File commitFile = Commit.createCommit(args[1], Utils.readObject(Ref.returnHeadCommit(), Commit.class).getUid());
         Branch.branchChange(Ref.returnHeadBranch().getName(), commitFile);
     }
@@ -75,6 +78,7 @@ public class MainMethods {
                     File targetFile = Utils.join(Repository.CWD, blobName);
                     Utils.writeContents(targetFile, blob.getContent());
                 }
+                Ref.changeHeadRef(Utils.join(Repository.BRANCH, branchName));
                 break;
             case 3:
                 if (!args[1].equals("--")) {
