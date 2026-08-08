@@ -28,7 +28,6 @@ public class Repository {
     public static final File INDEX = join(GITLET_DIR, "index");
     public static final File HEAD = join(GITLET_DIR, "head");
     public static final File BRANCH = join(GITLET_DIR, "branches");
-    public static final File REFS = join(GITLET_DIR, "refs");
 
 
     /* TODO: fill in the rest of this class. */
@@ -37,7 +36,6 @@ public class Repository {
         GITLET_DIR.mkdir();
         OBJECT.mkdir();
         BRANCH.mkdir();
-        REFS.mkdir();
         try {
             HEAD.createNewFile();
             INDEX.createNewFile();
