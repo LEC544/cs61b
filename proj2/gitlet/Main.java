@@ -22,6 +22,9 @@ public class Main {
             case "add":
                 add(args);
                 break;
+            case "rm":
+                rm(args);
+                break;
             case "commit":
                 commit(args);
                 break;

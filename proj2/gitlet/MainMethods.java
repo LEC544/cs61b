@@ -46,18 +46,32 @@ public class MainMethods {
     public static void add(String[] args) {
         shouldInited();
         corretArgumentNumber(2, args.length);
-        File f = Utils.join(Repository.CWD, args[1]);
+        String fileName = args[1];
+        File f = Utils.join(Repository.CWD, fileName);
         if (!f.exists()) {
             exit("File does not exist.");
         }
         Blobs b = new Blobs(f);
         String blobFile = b.makeBlob();
-        Index.add(args[1], blobFile);
+        Index.add(fileName, blobFile);
+    }
+
+    public static void rm(String[] args) {
+        shouldInited();
+        corretArgumentNumber(2, args.length);
+        String fileName = args[1];
+        if (Index.inCurrentIndex(fileName)) {
+            Index.removeAddFile(fileName);
+        } else if (Commit.inCurrentCommit(fileName)) {
+            Index.addRemove(fileName);
+        } else {
+            exit("No reason to remove the file.");
+        }
     }
 
     public static void commit(String[] args) {
         shouldInited();
-        if (args.length < 2 || args[1].equals("")) {
+        if (args.length < 2 || args[1].isEmpty()) {
             exit("Please enter a commit message.");
         }
         corretArgumentNumber(2, args.length);

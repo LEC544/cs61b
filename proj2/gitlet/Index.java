@@ -26,6 +26,18 @@ public class Index implements Serializable {
         writeObject(Repository.INDEX, i);
     }
 
+    public static void removeAddFile(String fileName) {
+        Index i = readObject(Repository.INDEX, Index.class);
+        i.getAddIndex().remove(fileName);
+        writeObject(Repository.INDEX, i);
+    }
+
+    public static void addRemove(String fileName) {
+        Index i = readObject(Repository.INDEX, Index.class);
+        i.getRemoveIndex().add(fileName);
+        writeObject(Repository.INDEX, i);
+    }
+
     public static HashMap<String, String> commitIndex() {
         Index i = readObject(Repository.INDEX, Index.class);
         Commit parent = readObject(Ref.returnHeadCommit(), Commit.class);
@@ -40,6 +52,11 @@ public class Index implements Serializable {
     public static boolean isChanged() {
         Index i = readObject(Repository.INDEX, Index.class);
         return !i.getAddIndex().isEmpty() || !i.getRemoveIndex().isEmpty();
+    }
+
+    public static boolean inCurrentIndex(String fileName) {
+        Index i = readObject(Repository.INDEX, Index.class);
+        return i.getAddIndex().containsKey(fileName);
     }
 
     public HashMap<String, String> getAddIndex() {

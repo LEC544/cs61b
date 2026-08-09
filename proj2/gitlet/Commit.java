@@ -52,18 +52,42 @@ public class Commit implements Serializable{
 
     public static File createCommit(String msg, String parent, String secondParent) {
         Commit commit = new Commit(msg, parent, secondParent);
-        File commitFile = Repository.makeObject(commit.getMessage() + commit.getDate().toString() + commit.getParent());
+        File commitFile = Repository.makeObject(commit.getMessage() +
+                commit.getDate().toString() +
+                commit.getParent());
         writeObject(commitFile, commit);
         return commitFile;
+    }
+
+    public static boolean inCurrentCommit(String fileName) {
+        Commit currentCommit = readObject(Ref.returnHeadCommit(), Commit.class);
+        return currentCommit.getMap2File().containsKey(fileName);
     }
 
     public void logprint() {
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy Z", Locale.ENGLISH); //WHAT CAN I SAY
         System.out.println("===");
         System.out.println("commit " + this.getUid());
+        if (!this.getSecondParent().equals(null)) {
+            System.out.println("Merge: " +
+                    Repository.findCommit(this.getParent()).getShort7Uid() + " " +
+                    Repository.findCommit(this.getSecondParent()).getShort7Uid());
+        }
         System.out.println("Date: " + formatter.format(this.getDate()));
         System.out.println(this.getMessage());
         System.out.println();
+    }
+
+    public String getShort7Uid() {
+        return getUid().substring(0, 7);
+    }
+
+    public String getShort6Uid() {
+        return getUid().substring(0, 6);
+    }
+
+    public String getSecondParent() {
+        return secondParent;
     }
 
     public Date getDate() {
