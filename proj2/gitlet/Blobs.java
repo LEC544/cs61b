@@ -13,8 +13,12 @@ public class Blobs implements Serializable {
         this.name = file.getName();
     }
 
+    public String computeUid() {
+        return sha1(getName() + getContent());
+    }
+
     public String makeBlob() {
-        String uid = sha1(getName() + getContent());
+        String uid = computeUid();
         File blobFile = Repository.makeObject(getName() + getContent());
         writeObject(blobFile, this);
         return uid;

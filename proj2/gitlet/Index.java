@@ -45,8 +45,25 @@ public class Index implements Serializable {
         for (String s : i.getAddIndex().keySet()) {
             hashMap.put(s, i.addIndex.get(s));
         }
+        for (String s : i.getRemoveIndex()) {
+            hashMap.remove(s);
+        }
         initIndex();
         return hashMap;
+    }
+
+    public static void printIndex() {
+        System.out.println("=== Staged Files ===");
+        Index i = readObject(Repository.INDEX, Index.class);
+        for (String addFile : i.getAddIndex().keySet()) {
+            System.out.println(addFile);
+        }
+        System.out.println();
+        System.out.println("=== Removed Files ===");
+        for (String removeFile : i.getRemoveIndex()) {
+            System.out.println(removeFile);
+        }
+        System.out.println();
     }
 
     public static boolean isChanged() {

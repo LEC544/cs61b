@@ -2,6 +2,7 @@ package gitlet;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.List;
 
 import static gitlet.Utils.*;
 
@@ -30,6 +31,19 @@ public class Branch implements Serializable {
         File branchFile = join(Repository.BRANCH, branchName);
         Branch branch = new Branch(new Ref(commitFile));
         writeObject(branchFile, branch);
+    }
+
+    public static void printBranch() {
+        System.out.println("=== Branches ===");
+        List<String> branchList = Utils.plainFilenamesIn(Repository.BRANCH);
+        String headBranchName = Ref.returnHeadBranch().getName();
+        System.out.println("*"+headBranchName);
+        for (String branchName : branchList) {
+            if (!branchName.equals(headBranchName)) {
+                System.out.println(branchName);
+            }
+        }
+        System.out.println();
     }
 
     public Ref getRef2Commit() {

@@ -34,6 +34,9 @@ public class Main {
             case "log":
                 log(args);
                 break;
+            case "status":
+                status(args);
+                break;
             default:
                 exit("No command with that name exists.");
         }

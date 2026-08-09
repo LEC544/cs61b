@@ -32,6 +32,9 @@ public class Ref implements Serializable {
         return ref.getPointer();
     }
 
+    public static void printDiff() {
+    }
+
     public File getPointer() {
         return pointer;
     }

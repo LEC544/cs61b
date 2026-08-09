@@ -68,7 +68,7 @@ public class Commit implements Serializable{
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy Z", Locale.ENGLISH); //WHAT CAN I SAY
         System.out.println("===");
         System.out.println("commit " + this.getUid());
-        if (!this.getSecondParent().equals(null)) {
+        if (!(this.getSecondParent() == null)) {
             System.out.println("Merge: " +
                     Repository.findCommit(this.getParent()).getShort7Uid() + " " +
                     Repository.findCommit(this.getSecondParent()).getShort7Uid());

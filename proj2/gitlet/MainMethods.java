@@ -135,4 +135,12 @@ public class MainMethods {
         }
         c.logprint();
     }
+
+    public static void status(String[] args) {
+        shouldInited();
+        corretArgumentNumber(1, args.length);
+        Branch.printBranch();
+        Index.printIndex();
+        Ref.printDiff();
+    }
 }
