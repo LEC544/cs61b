@@ -5,23 +5,29 @@ import java.io.File;
 public class MainMethods {
     public static void exit(String msg) {
         System.out.println(msg);
-        java.lang.System.exit(1);
+        System.exit(0);
     }
 
     public static void corretArgumentNumber(int expect, int actual) {
         if (expect != actual) {
-            exit("wrong argument numbers!!!");
+            exit("Incorrect operands.");
         }
     }
 
-    public static void argumentNumberRange(int min, int max, int actual) {
+    public static void corretArgumentNumber(int min, int max, int actual) {
         if (actual < min || actual > max) {
-            exit("wrong argument numbers!!!");
+            exit("Incorrect operands.");
         }
     }
 
     public static boolean inited() {
         return Repository.GITLET_DIR.exists();
+    }
+
+    public static void shouldInited() {
+        if (!inited()) {
+            exit("Not in an initialized Gitlet directory.");
+        }
     }
 
     public static void init(String[] args) {
@@ -32,19 +38,17 @@ public class MainMethods {
         corretArgumentNumber(1, argLength);
         Repository.createRepository();
         Index.initIndex();
-        File commitFile = Commit.createCommit("initial commit", null);
+        File commitFile = Commit.createCommit("initial commit", null, null);
         Branch.createBranch("master", commitFile);
         Ref.changeHeadRef(Utils.join(Repository.BRANCH, "master"));
     }
 
     public static void add(String[] args) {
-        if (!inited()) {
-            exit("must inited");
-        }
+        shouldInited();
         corretArgumentNumber(2, args.length);
         File f = Utils.join(Repository.CWD, args[1]);
         if (!f.exists()) {
-            exit("file doesn't exist");
+            exit("File does not exist.");
         }
         Blobs b = new Blobs(f);
         String blobFile = b.makeBlob();
@@ -52,22 +56,23 @@ public class MainMethods {
     }
 
     public static void commit(String[] args) {
-        if (!inited()) {
-            exit("must inited");
+        shouldInited();
+        if (args.length < 2 || args[1].equals("")) {
+            exit("Please enter a commit message.");
         }
         corretArgumentNumber(2, args.length);
         if (!Index.isChanged()) {
-            exit("didn't change");
+            exit("No changes added to the commit.");
         }
-        File commitFile = Commit.createCommit(args[1], Utils.readObject(Ref.returnHeadCommit(), Commit.class).getUid());
+        String msg = args[1];
+        String parentUid = Utils.readObject(Ref.returnHeadCommit(), Commit.class).getUid();
+        File commitFile = Commit.createCommit(msg, parentUid, null);
         Branch.branchChange(Ref.returnHeadBranch().getName(), commitFile);
     }
 
     public static void checkout(String[] args) {
-        if (!inited()) {
-            exit("must inited");
-        }
-        argumentNumberRange(2, 4, args.length);
+        shouldInited();
+        corretArgumentNumber(2, 4, args.length);
         switch (args.length) {
             case 2:
                 String branchName = args[1];
@@ -107,9 +112,7 @@ public class MainMethods {
     }
 
     public static void log(String[] args) {
-        if (!inited()) {
-            exit("must inited");
-        }
+        shouldInited();
         corretArgumentNumber(1, args.length);
         Commit c = Utils.readObject(Ref.returnHeadCommit(), Commit.class);
         while (c.getParent() != null) {

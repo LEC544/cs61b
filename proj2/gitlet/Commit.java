@@ -30,30 +30,31 @@ public class Commit implements Serializable{
     private String message;
     private Date date;
     private String parent;
+    private String secondParent;
+    private String uid;
     private HashMap<String, String> map2File;
 
 
-    public Commit(String msg, String parent) {
+    public Commit(String msg, String parent, String secondParent) {
         this.message = msg;
         this.parent = parent;
         if (parent == null) {
             this.date = new Date(0);
+            this.secondParent = null;
             this.map2File = new HashMap<>();
         } else {
             this.date = new Date();
+            this.secondParent = secondParent;
             this.map2File = Index.commitIndex();
         }
+        this.uid = sha1(getMessage() + getDate().toString() + getParent());
     }
 
-    public static File createCommit(String msg, String parent) {
-        Commit commit = new Commit(msg, parent);
+    public static File createCommit(String msg, String parent, String secondParent) {
+        Commit commit = new Commit(msg, parent, secondParent);
         File commitFile = Repository.makeObject(commit.getMessage() + commit.getDate().toString() + commit.getParent());
         writeObject(commitFile, commit);
         return commitFile;
-    }
-
-    public String getUid() {
-        return sha1(getMessage() + getDate().toString() + getParent());
     }
 
     public void logprint() {
@@ -79,6 +80,10 @@ public class Commit implements Serializable{
 
     public HashMap<String, String> getMap2File() {
         return map2File;
+    }
+
+    public String getUid() {
+        return uid;
     }
 
     /* TODO: fill in the rest of this class. */

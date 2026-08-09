@@ -12,7 +12,7 @@ public class Main {
      */
     public static void main(String[] args) {
         if (args.length == 0) {
-            exit("at least one argument");
+            exit("Please enter a command.");
         }
         String firstArg = args[0];
         switch(firstArg) {
@@ -20,10 +20,8 @@ public class Main {
                 init(args);
                 break;
             case "add":
-                // TODO: handle the `add [filename]` command
                 add(args);
                 break;
-            // TODO: FILL THE REST IN
             case "commit":
                 commit(args);
                 break;
@@ -33,6 +31,8 @@ public class Main {
             case "log":
                 log(args);
                 break;
+            default:
+                exit("No command with that name exists.");
         }
     }
 }
