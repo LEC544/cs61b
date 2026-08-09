@@ -33,6 +33,10 @@ public class Ref implements Serializable {
     }
 
     public static void printDiff() {
+        System.out.println("=== Modifications Not Staged For Commit ===");
+        System.out.println();
+        System.out.println("=== Untracked Files ===");
+        System.out.println();
     }
 
     public File getPointer() {
