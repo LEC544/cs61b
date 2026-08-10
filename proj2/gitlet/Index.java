@@ -36,6 +36,10 @@ public class Index implements Serializable {
         Index i = readObject(Repository.INDEX, Index.class);
         i.getRemoveIndex().add(fileName);
         writeObject(Repository.INDEX, i);
+        File file = join(Repository.CWD, fileName);
+        if (file.exists()) {
+            restrictedDelete(file);
+        }
     }
 
     public static HashMap<String, String> commitIndex() {
