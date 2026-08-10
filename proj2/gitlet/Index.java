@@ -23,7 +23,11 @@ public class Index implements Serializable {
     public static void refreshIndex() {
         Index i = readObject(Repository.INDEX, Index.class);
         for (String s: i.getRemoveIndex()) {
-            Blobs b = new Blobs(join(Repository.CWD, s));
+            File file = join(Repository.CWD, s);
+            if (!file.exists()) {
+                continue;
+            }
+            Blobs b = new Blobs(file);
             if (Repository.findObject(b.getUid())) {
                 i.getRemoveIndex().remove(s);
             }
