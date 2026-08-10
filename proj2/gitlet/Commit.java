@@ -1,6 +1,5 @@
 package gitlet;
 
-// TODO: any imports you need here
 
 import java.io.File;
 import java.io.Serializable;
@@ -12,14 +11,12 @@ import java.util.Locale;
 import static gitlet.Utils.*;
 
 /** Represents a gitlet commit object.
- *  TODO: It's a good idea to give a description here of what else this Class
  *  does at a high level.
  *
- *  @author TODO
+ *  @author joshua
  */
-public class Commit implements Serializable{
+public class Commit implements Serializable {
     /**
-     * TODO: add instance variables here.
      *
      * List all instance variables of the Commit class here with a useful
      * comment above them describing what that variable represents and how that
@@ -63,13 +60,14 @@ public class Commit implements Serializable{
     }
 
     public void logprint() {
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy Z", Locale.ENGLISH); //WHAT CAN I SAY
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy Z", Locale.ENGLISH);
         System.out.println("===");
         System.out.println("commit " + this.getUid());
         if (!(this.getSecondParent() == null)) {
-            System.out.println("Merge: " +
-                    Repository.findCommit(this.getParent()).getShort7Uid() + " " +
-                    Repository.findCommit(this.getSecondParent()).getShort7Uid());
+            System.out.println("Merge: "
+                    + Repository.findCommit(this.getParent()).getShort7Uid()
+                    + " "
+                    + Repository.findCommit(this.getSecondParent()).getShort7Uid());
         }
         System.out.println("Date: " + formatter.format(this.getDate()));
         System.out.println(this.getMessage());

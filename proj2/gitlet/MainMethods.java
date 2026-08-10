@@ -63,10 +63,6 @@ public class MainMethods {
         shouldInited();
         corretArgumentNumber(2, args.length);
         String fileName = args[1];
-        File file = Utils.join(Repository.CWD, fileName);
-        if (file.exists()) {
-            Utils.restrictedDelete(file);
-        }
         if (Index.inCurrentIndex(fileName)) {
             Index.removeAddFile(fileName);
         } else if (Commit.inCurrentCommit(fileName)) {
@@ -124,10 +120,12 @@ public class MainMethods {
                 String commitName = args[1];
                 String target = args[3];
                 Commit targetCommit = Repository.findCommit(commitName);
-                String BlobId = targetCommit.getMap2File().get(target);
-                Blobs targetBlob = Repository.findBlob(BlobId);
+                String blobId = targetCommit.getMap2File().get(target);
+                Blobs targetBlob = Repository.findBlob(blobId);
                 File targetFile = Utils.join(Repository.CWD, target);
                 Utils.writeContents(targetFile, targetBlob.getContent());
+                break;
+            default:
                 break;
         }
     }

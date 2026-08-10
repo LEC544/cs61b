@@ -36,12 +36,6 @@ public class Repository {
         GITLET_DIR.mkdir();
         OBJECT.mkdir();
         BRANCH.mkdir();
-        try {
-            HEAD.createNewFile();
-            INDEX.createNewFile();
-        } catch (Exception ignore) {
-
-        }
     }
 
     public static File makeObject(String object) {
@@ -50,23 +44,18 @@ public class Repository {
             compressionPath.mkdir();
         }
         File Object = join(compressionPath, object.substring(2));
-        try {
-            Object.createNewFile();
-        } catch (Exception ignore) {
-
-        }
         return  Object;
     }
 
     public static boolean findObject(String object) {
-        File Object = join(join(OBJECT, object.substring(0, 2)), object.substring(2));
-        return Object.exists();
+        File objectFile = join(join(OBJECT, object.substring(0, 2)), object.substring(2));
+        return objectFile.exists();
     }
 
     public static boolean deleteObject(String object) {
-        File ObjectDir = join(OBJECT, object.substring(0, 2));
-        File Object = join(ObjectDir, object.substring(2));
-        return restrictedDelete(Object);
+        File objectDir = join(OBJECT, object.substring(0, 2));
+        File objectFile = join(objectDir, object.substring(2));
+        return restrictedDelete(objectFile);
     }
 
     public static Blobs findBlob(String blobName) {
@@ -81,7 +70,7 @@ public class Repository {
 
     public static Commit findCommit(String commitName) {
         File commitDir = join(OBJECT, commitName.substring(0, 2));
-        File commitFile = join(commitDir,commitName.substring(2));
+        File commitFile = join(commitDir, commitName.substring(2));
         if (!commitFile.exists()) {
             throw new GitletException("Can't Find This Branch");
         }

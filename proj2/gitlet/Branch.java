@@ -18,11 +18,6 @@ public class Branch implements Serializable {
         if (branchFile.exists()) {
             MainMethods.exit("branch already created");
         }
-        try {
-            branchFile.createNewFile();
-        } catch (Exception ignore) {
-
-        }
         Branch branch = new Branch(new Ref(commitName));
         writeObject(branchFile, branch);
     }
@@ -37,7 +32,7 @@ public class Branch implements Serializable {
         System.out.println("=== Branches ===");
         List<String> branchList = Utils.plainFilenamesIn(Repository.BRANCH);
         String headBranchName = Ref.returnHeadBranch().getName();
-        System.out.println("*"+headBranchName);
+        System.out.println("*" + headBranchName);
         for (String branchName : branchList) {
             if (!branchName.equals(headBranchName)) {
                 System.out.println(branchName);

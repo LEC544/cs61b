@@ -16,10 +16,9 @@ public class Blobs implements Serializable {
     }
 
     public String makeBlob() {
-        String uid = this.getUid();
         File blobFile = Repository.makeObject(this.uid);
         writeObject(blobFile, this);
-        return uid;
+        return this.uid;
     }
 
     public String getContent() {
