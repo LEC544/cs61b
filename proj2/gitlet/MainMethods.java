@@ -52,6 +52,9 @@ public class MainMethods {
             exit("File does not exist.");
         }
         Blobs b = new Blobs(f);
+        if (Repository.findObject(b.getUid())) {
+            return;
+        }
         String blobFile = b.makeBlob();
         Index.add(fileName, blobFile);
     }
@@ -141,6 +144,5 @@ public class MainMethods {
         corretArgumentNumber(1, args.length);
         Branch.printBranch();
         Index.printIndex();
-        Ref.printDiff();
     }
 }

@@ -50,15 +50,23 @@ public class Repository {
             compressionPath.mkdir();
         }
         File Object = join(compressionPath, object.substring(2));
-        if (Object.exists()) {
-            return Object;
-        }
         try {
             Object.createNewFile();
         } catch (Exception ignore) {
 
         }
         return  Object;
+    }
+
+    public static boolean findObject(String object) {
+        File Object = join(join(OBJECT, object.substring(0, 2)), object.substring(2));
+        return Object.exists();
+    }
+
+    public static boolean deleteObject(String object) {
+        File ObjectDir = join(OBJECT, object.substring(0, 2));
+        File Object = join(ObjectDir, object.substring(2));
+        return restrictedDelete(Object);
     }
 
     public static Blobs findBlob(String blobName) {

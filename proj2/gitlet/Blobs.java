@@ -15,12 +15,8 @@ public class Blobs implements Serializable {
         this.uid = sha1(this.name + this.content);
     }
 
-    public String computeUid() {
-        return sha1(getName() + getContent());
-    }
-
     public String makeBlob() {
-        String uid = computeUid();
+        String uid = this.getUid();
         File blobFile = Repository.makeObject(this.uid);
         writeObject(blobFile, this);
         return uid;
@@ -32,5 +28,9 @@ public class Blobs implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getUid() {
+        return uid;
     }
 }

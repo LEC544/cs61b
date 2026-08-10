@@ -20,6 +20,17 @@ public class Index implements Serializable {
         writeObject(Repository.INDEX, new Index());
     }
 
+    public static void refreshIndex() {
+        Index i = readObject(Repository.INDEX, Index.class);
+        for (String s: i.getRemoveIndex()) {
+            Blobs b = new Blobs(join(Repository.CWD, s));
+            if (Repository.findObject(b.getUid())) {
+                i.getRemoveIndex().remove(s);
+            }
+        }
+        writeObject(Repository.INDEX, i);
+    }
+
     public static void add(String name, String blob) {
         Index i = readObject(Repository.INDEX, Index.class);
         i.addIndex.put(name, blob);
@@ -29,7 +40,7 @@ public class Index implements Serializable {
     public static void removeAddFile(String fileName) {
         Index i = readObject(Repository.INDEX, Index.class);
         String blobName = i.getAddIndex().get(fileName);
-
+        Repository.deleteObject(blobName);
         i.getAddIndex().remove(fileName);
         writeObject(Repository.INDEX, i);
     }
@@ -48,10 +59,10 @@ public class Index implements Serializable {
         Index i = readObject(Repository.INDEX, Index.class);
         Commit parent = readObject(Ref.returnHeadCommit(), Commit.class);
         HashMap<String, String> hashMap = parent.getMap2File();
-        for (String s : i.getAddIndex().keySet()) {
+        for (String s: i.getAddIndex().keySet()) {
             hashMap.put(s, i.addIndex.get(s));
         }
-        for (String s : i.getRemoveIndex()) {
+        for (String s: i.getRemoveIndex()) {
             hashMap.remove(s);
         }
         initIndex();
@@ -59,6 +70,7 @@ public class Index implements Serializable {
     }
 
     public static void printIndex() {
+        refreshIndex();
         System.out.println("=== Staged Files ===");
         Index i = readObject(Repository.INDEX, Index.class);
         for (String addFile : i.getAddIndex().keySet()) {
@@ -69,6 +81,10 @@ public class Index implements Serializable {
         for (String removeFile : i.getRemoveIndex()) {
             System.out.println(removeFile);
         }
+        System.out.println();
+        System.out.println("=== Modifications Not Staged For Commit ===");
+        System.out.println();
+        System.out.println("=== Untracked Files ===");
         System.out.println();
     }
 
