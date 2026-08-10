@@ -63,6 +63,10 @@ public class MainMethods {
         shouldInited();
         corretArgumentNumber(2, args.length);
         String fileName = args[1];
+        File file = Utils.join(Repository.CWD, fileName);
+        if (file.exists()) {
+            Utils.restrictedDelete(file);
+        }
         if (Index.inCurrentIndex(fileName)) {
             Index.removeAddFile(fileName);
         } else if (Commit.inCurrentCommit(fileName)) {

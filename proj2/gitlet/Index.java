@@ -43,8 +43,6 @@ public class Index implements Serializable {
 
     public static void removeAddFile(String fileName) {
         Index i = readObject(Repository.INDEX, Index.class);
-        String blobName = i.getAddIndex().get(fileName);
-        Repository.deleteObject(blobName);
         i.getAddIndex().remove(fileName);
         writeObject(Repository.INDEX, i);
     }
