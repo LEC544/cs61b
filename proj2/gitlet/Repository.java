@@ -45,12 +45,11 @@ public class Repository {
     }
 
     public static File makeObject(String object) {
-        String uid = sha1(object);
-        File compressionPath = join(Repository.OBJECT, uid.substring(0, 2));
+        File compressionPath = join(Repository.OBJECT, object.substring(0, 2));
         if (!compressionPath.exists()) {
             compressionPath.mkdir();
         }
-        File Object = join(compressionPath, uid.substring(2));
+        File Object = join(compressionPath, object.substring(2));
         if (Object.exists()) {
             return Object;
         }

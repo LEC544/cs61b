@@ -52,9 +52,7 @@ public class Commit implements Serializable{
 
     public static File createCommit(String msg, String parent, String secondParent) {
         Commit commit = new Commit(msg, parent, secondParent);
-        File commitFile = Repository.makeObject(commit.getMessage() +
-                commit.getDate().toString() +
-                commit.getParent());
+        File commitFile = Repository.makeObject(commit.getUid());
         writeObject(commitFile, commit);
         return commitFile;
     }
