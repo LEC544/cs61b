@@ -59,6 +59,9 @@ public class Repository {
     }
 
     public static Blobs findBlob(String blobName) {
+        if (blobName.isEmpty()) {
+            MainMethods.exit("File does not exist in that commit.");
+        }
         File blobDir = join(OBJECT, blobName.substring(0, 2));
         File blobFile = join(blobDir, blobName.substring(2));
         if (!blobFile.exists()) {
