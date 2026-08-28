@@ -92,6 +92,7 @@ public class MainMethods {
         corretArgumentNumber(2, 4, args.length);
         switch (args.length) {
             case 2:
+                // checkout branch
                 String branchName = args[1];
                 Branch branch = Repository.findBranch(branchName);
                 Commit commit = Utils.readObject(branch.getRef2Commit().getPointer(), Commit.class);
@@ -103,8 +104,9 @@ public class MainMethods {
                 Ref.changeHeadRef(Utils.join(Repository.BRANCH, branchName));
                 break;
             case 3:
+                // checkout file
                 if (!args[1].equals("--")) {
-                    exit("wrong statement");
+                    exit("Incorrect operands.");
                 }
                 String fileName = args[2];
                 File file = Utils.join(Repository.CWD, fileName);
@@ -114,8 +116,9 @@ public class MainMethods {
                 Utils.writeContents(file, b.getContent());
                 break;
             case 4:
+                // checkout commit file
                 if (!args[2].equals("--")) {
-                    exit("wrong statement");
+                    exit("Incorrect operands.");
                 }
                 String commitName = args[1];
                 String target = args[3];
@@ -126,6 +129,7 @@ public class MainMethods {
                 Utils.writeContents(targetFile, targetBlob.getContent());
                 break;
             default:
+                exit("No command with that name exists.");
                 break;
         }
     }

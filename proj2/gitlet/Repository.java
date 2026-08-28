@@ -62,7 +62,7 @@ public class Repository {
         File blobDir = join(OBJECT, blobName.substring(0, 2));
         File blobFile = join(blobDir, blobName.substring(2));
         if (!blobFile.exists()) {
-            throw new GitletException("Can't Find This File");
+            MainMethods.exit("File does not exist in that commit.");
         }
         Blobs b = readObject(blobFile, Blobs.class);
         return b;
@@ -72,7 +72,7 @@ public class Repository {
         File commitDir = join(OBJECT, commitName.substring(0, 2));
         File commitFile = join(commitDir, commitName.substring(2));
         if (!commitFile.exists()) {
-            throw new GitletException("Can't Find This Branch");
+            MainMethods.exit("No commit with that id exists.");
         }
         Commit c = readObject(commitFile, Commit.class);
         return c;
@@ -80,6 +80,9 @@ public class Repository {
 
     public static Branch findBranch(String branchName) {
         File branchFile = join(BRANCH, branchName);
+        if (!branchFile.exists()) {
+            MainMethods.exit("No such branch exists.");
+        }
         Branch b = readObject(branchFile, Branch.class);
         return b;
     }
