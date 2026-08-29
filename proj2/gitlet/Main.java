@@ -40,6 +40,9 @@ public class Main {
             case "global-log":
                 globalLog(args);
                 break;
+            case "find":
+                find(args);
+                break;
             default:
                 exit("No command with that name exists.");
         }

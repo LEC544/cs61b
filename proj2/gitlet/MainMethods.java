@@ -127,4 +127,11 @@ public class MainMethods {
         correctArgumentNumber(1, args.length);
         GitletUtils.printGlobalLog();
     }
+
+    public static void find(String[] args) {
+        shouldInited();
+        correctArgumentNumber(2, args.length);
+        String msg = args[1];
+        GitletUtils.find(msg);
+    }
 }

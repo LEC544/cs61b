@@ -57,8 +57,8 @@ public class GitletUtils {
 
     public static void checkoutFile(String fileName) {
         File file = Utils.join(Repository.CWD, fileName);
-        File Blobfile = Ref.returnHeadCommit();
-        Commit commit = Utils.readObject(Blobfile, Commit.class);
+        File blobFile = Ref.returnHeadCommit();
+        Commit commit = Utils.readObject(blobFile, Commit.class);
         Blobs blob = Repository.findBlob(commit.getMap2File().get(fileName));
         Utils.writeContents(file, blob.getContent());
     }
@@ -93,8 +93,23 @@ public class GitletUtils {
         for (String commitName : commitList) {
             File commitFile = Utils.join(Repository.COMMIT, commitName);
             Commit commit = Utils.readObject(commitFile, Commit.class);
-            System.out.println("===");
-            System.out.println("commit " + commit.getUid());
+            commit.logPrint();
+        }
+    }
+
+    public static void find(String msg) {
+        boolean findFlag = false;
+        List<String> commitList = Utils.plainFilenamesIn(Repository.COMMIT);
+        for (String commitName : commitList) {
+            File commitFile = Utils.join(Repository.COMMIT, commitName);
+            Commit commit = Utils.readObject(commitFile, Commit.class);
+            if (commit.getMessage().equals(msg)) {
+                System.out.println(commit.getUid());
+                findFlag = true;
+            }
+        }
+        if (!findFlag) {
+            MainMethods.exit("Found no commit with that message.");
         }
     }
 }
