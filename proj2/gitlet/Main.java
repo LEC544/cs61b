@@ -43,6 +43,12 @@ public class Main {
             case "find":
                 find(args);
                 break;
+            case "branch":
+                branch(args);
+                break;
+            case "rm-branch":
+                rmBranch(args);
+                break;
             default:
                 exit("No command with that name exists.");
         }

@@ -134,4 +134,18 @@ public class MainMethods {
         String msg = args[1];
         GitletUtils.find(msg);
     }
+
+    public static void branch(String[] args) {
+        shouldInited();
+        correctArgumentNumber(2, args.length);
+        String branchName = args[1];
+        GitletUtils.createBranch(branchName);
+    }
+
+    public static void rmBranch(String[] args) {
+        shouldInited();
+        correctArgumentNumber(2, args.length);
+        String branchName = args[1];
+        GitletUtils.removeBranch(branchName);
+    }
 }

@@ -139,4 +139,13 @@ public class GitletUtils {
             MainMethods.exit("Found no commit with that message.");
         }
     }
+
+    public static void createBranch(String branchName) {
+        File commitFile = Ref.returnHeadCommit();
+        Branch.createBranch(branchName, commitFile);
+    }
+
+    public static void removeBranch(String branchName) {
+
+    }
 }

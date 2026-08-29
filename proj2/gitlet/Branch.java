@@ -16,11 +16,23 @@ public class Branch implements Serializable {
     public static File createBranch(String branchName, File commitFile) {
         File branchFile = join(Repository.BRANCH, branchName);
         if (branchFile.exists()) {
-            MainMethods.exit("branch already created");
+            MainMethods.exit("A branch with that name already exists.");
         }
         Branch branch = new Branch(new Ref(commitFile));
         writeObject(branchFile, branch);
         return branchFile;
+    }
+
+    public static void removeBranch(String branchName) {
+        String currentBranch = Ref.returnHeadBranch().getName();
+        if (currentBranch.equals(branchName)) {
+            MainMethods.exit("Cannot remove the current branch.");
+        }
+        File branchFile = join(Repository.BRANCH, branchName);
+        if (!branchFile.exists()) {
+            MainMethods.exit("branch with that name does not exist.");
+        }
+        restrictedDelete(branchFile);
     }
 
     public static void branchRepoint(File branchFile, File commitFile) {
