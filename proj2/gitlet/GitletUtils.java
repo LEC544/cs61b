@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GitletUtils {
+    private static final int shortCommitID = 7;
+    private static final int longCommitID = 40;
+
     public static void init() {
         Repository.createRepository();
         Index.initIndex();
@@ -101,7 +104,19 @@ public class GitletUtils {
     }
 
     public static void checkoutFileInCommit(String commitName, String fileName) {
-        Commit targetCommit = Repository.findCommit(commitName);
+        String realCommitName = "";
+        if (commitName.length() == longCommitID) {
+            realCommitName = commitName;
+        }
+        if (commitName.length() == shortCommitID) {
+            List<String> commitList = Utils.plainFilenamesIn(Repository.COMMIT);
+            for (String commit : commitList) {
+                if (commit.substring(0, 7).equals(commitName)) {
+                    realCommitName = commit;
+                }
+            }
+        }
+        Commit targetCommit = Repository.findCommit(realCommitName);
         String blobId = targetCommit.getMap2File().get(fileName);
         Blobs targetBlob = Repository.findBlob(blobId);
         File targetFile = Utils.join(Repository.CWD, fileName);

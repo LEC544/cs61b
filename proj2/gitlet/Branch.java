@@ -32,7 +32,7 @@ public class Branch implements Serializable {
         if (!branchFile.exists()) {
             MainMethods.exit("branch with that name does not exist.");
         }
-        restrictedDelete(branchFile);
+        branchFile.delete();
     }
 
     public static void branchRepoint(File branchFile, File commitFile) {
