@@ -39,7 +39,7 @@ public class Repository {
     }
 
     public static boolean isCommitExists(String commitUid) {
-        if (commitUid.isEmpty()) {
+        if (commitUid == null) {
             return false;
         }
         return join(COMMIT, commitUid).exists();
@@ -50,21 +50,21 @@ public class Repository {
     }
 
     public static boolean isBlobExists(String blobUid) {
-        if (blobUid.isEmpty()) {
+        if (blobUid == null) {
             return false;
         }
         return join(BLOB, blobUid).exists();
     }
 
     public static boolean isFileExists(String fileName) {
-        if (fileName.isEmpty()) {
+        if (fileName == null) {
             return false;
         }
         return join(CWD, fileName).exists();
     }
 
     public static Blobs findBlob(String blobName) {
-        if (blobName.isEmpty()) {
+        if (blobName == null) {
             MainMethods.exit("File does not exist in that commit.");
         }
         File blobFile = join(BLOB, blobName);
@@ -76,7 +76,7 @@ public class Repository {
     }
 
     public static Commit findCommit(String commitUid) {
-        if (commitUid.isEmpty()) {
+        if (commitUid == null) {
             MainMethods.exit("No commit with that id exists.");
         }
         File commitFile = join(COMMIT, commitUid);
@@ -88,7 +88,7 @@ public class Repository {
     }
 
     public static Branch findBranch(String branchName) {
-        if (branchName.isEmpty()) {
+        if (branchName == null) {
             MainMethods.exit("No such branch exists.");
         }
         File branchFile = join(BRANCH, branchName);
