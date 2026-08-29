@@ -43,6 +43,9 @@ public class Repository {
     }
 
     public static boolean isCommitExists(String commitUid) {
+        if (commitUid.isEmpty()) {
+            return false;
+        }
         return join(COMMIT, commitUid).exists();
     }
 
@@ -51,10 +54,16 @@ public class Repository {
     }
 
     public static boolean isBlobExists(String blobUid) {
+        if (blobUid.isEmpty()) {
+            return false;
+        }
         return join(BLOB, blobUid).exists();
     }
 
     public static boolean isFileExists(String fileName) {
+        if (fileName.isEmpty()) {
+            return false;
+        }
         return join(CWD, fileName).exists();
     }
 

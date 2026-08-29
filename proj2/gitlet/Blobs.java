@@ -17,7 +17,7 @@ public class Blobs implements Serializable {
     }
 
     public Blobs(String fileName) {
-        new Blobs(join(Repository.CWD, fileName));
+        this(join(Repository.CWD, fileName));
     }
 
     public String makeBlob() {
