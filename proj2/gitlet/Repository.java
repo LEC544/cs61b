@@ -24,69 +24,64 @@ public class Repository {
     public static final File CWD = new File(System.getProperty("user.dir"));
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
-    public static final File OBJECT = join(GITLET_DIR, "object");
+    public static final File BLOB = join(GITLET_DIR, "blob");
+    public static final File COMMIT = join(GITLET_DIR, "commit");
     public static final File INDEX = join(GITLET_DIR, "index");
     public static final File HEAD = join(GITLET_DIR, "head");
-    public static final File BRANCH = join(GITLET_DIR, "branches");
+    public static final File BRANCH = join(GITLET_DIR, "branch");
 
-
-    /* TODO: fill in the rest of this class. */
-
+    /** Create and Init the Repository **/
     public static void createRepository() {
         GITLET_DIR.mkdir();
-        OBJECT.mkdir();
+        BLOB.mkdir();
         BRANCH.mkdir();
+        COMMIT.mkdir();
     }
 
-    public static File makeObject(String object) {
-        File compressionPath = join(Repository.OBJECT, object.substring(0, 2));
-        if (!compressionPath.exists()) {
-            compressionPath.mkdir();
-        }
-        File Object = join(compressionPath, object.substring(2));
-        return  Object;
+    public static File makeCommit(String commmitUid) {
+        return join(Repository.COMMIT, commmitUid);
     }
 
-    public static boolean findObject(String object) {
-        File objectFile = join(join(OBJECT, object.substring(0, 2)), object.substring(2));
-        return objectFile.exists();
+    public static boolean isCommitExists(String commitUid) {
+        return join(COMMIT, commitUid).exists();
     }
 
-    public static boolean deleteObject(String object) {
-        File objectDir = join(OBJECT, object.substring(0, 2));
-        File objectFile = join(objectDir, object.substring(2));
-        return restrictedDelete(objectFile);
+    public static File makeBlob(String blobUid) {
+        return join(Repository.BLOB, blobUid);
+    }
+
+    public static boolean isBlobExists(String blobUid) {
+        return join(BLOB, blobUid).exists();
+    }
+
+    public static boolean isFileExists(String fileName) {
+        return join(CWD, fileName).exists();
     }
 
     public static Blobs findBlob(String blobName) {
-        if (blobName.isEmpty()) {
-            MainMethods.exit("File does not exist in that commit.");
-        }
-        File blobDir = join(OBJECT, blobName.substring(0, 2));
-        File blobFile = join(blobDir, blobName.substring(2));
+        File blobFile = join(BLOB, blobName);
         if (!blobFile.exists()) {
             MainMethods.exit("File does not exist in that commit.");
         }
-        Blobs b = readObject(blobFile, Blobs.class);
-        return b;
+        Blobs blob = readObject(blobFile, Blobs.class);
+        return blob;
     }
 
-    public static Commit findCommit(String commitName) {
-        File commitDir = join(OBJECT, commitName.substring(0, 2));
-        File commitFile = join(commitDir, commitName.substring(2));
+    public static Commit findCommit(String commitUid) {
+        File commitFile = join(COMMIT, commitUid);
         if (!commitFile.exists()) {
             MainMethods.exit("No commit with that id exists.");
         }
-        Commit c = readObject(commitFile, Commit.class);
-        return c;
+        Commit commit = readObject(commitFile, Commit.class);
+        return commit;
     }
 
     public static Branch findBranch(String branchName) {
         File branchFile = join(BRANCH, branchName);
         if (!branchFile.exists()) {
-            MainMethods.exit("No such branch exists.");
+            MainMethods.exit("No branch with that name exists.");
         }
-        Branch b = readObject(branchFile, Branch.class);
-        return b;
+        Branch branch = readObject(branchFile, Branch.class);
+        return branch;
     }
 }

@@ -2,6 +2,7 @@ package gitlet;
 
 import java.io.Serializable;
 import java.io.File;
+
 import static gitlet.Utils.*;
 
 public class Blobs implements Serializable {
@@ -15,8 +16,12 @@ public class Blobs implements Serializable {
         this.uid = sha1(this.name + this.content);
     }
 
+    public Blobs(String fileName) {
+        new Blobs(join(Repository.CWD, fileName));
+    }
+
     public String makeBlob() {
-        File blobFile = Repository.makeObject(this.uid);
+        File blobFile = Repository.makeBlob(this.uid);
         writeObject(blobFile, this);
         return this.uid;
     }

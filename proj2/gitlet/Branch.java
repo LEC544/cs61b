@@ -13,17 +13,17 @@ public class Branch implements Serializable {
         this.ref2Commit = ref;
     }
 
-    public static void createBranch(String branchName, File commitName) {
+    public static File createBranch(String branchName, File commitFile) {
         File branchFile = join(Repository.BRANCH, branchName);
         if (branchFile.exists()) {
             MainMethods.exit("branch already created");
         }
-        Branch branch = new Branch(new Ref(commitName));
+        Branch branch = new Branch(new Ref(commitFile));
         writeObject(branchFile, branch);
+        return branchFile;
     }
 
-    public static void branchChange(String branchName, File commitFile) {
-        File branchFile = join(Repository.BRANCH, branchName);
+    public static void branchRepoint(File branchFile, File commitFile) {
         Branch branch = new Branch(new Ref(commitFile));
         writeObject(branchFile, branch);
     }
@@ -43,5 +43,10 @@ public class Branch implements Serializable {
 
     public Ref getRef2Commit() {
         return ref2Commit;
+    }
+
+    public Commit getCommit() {
+        File commitFile = this.getRef2Commit().getPointer();
+        return readObject(commitFile, Commit.class);
     }
 }

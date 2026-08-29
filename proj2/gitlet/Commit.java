@@ -22,8 +22,6 @@ public class Commit implements Serializable {
      * comment above them describing what that variable represents and how that
      * variable is used. We've provided one example for `message`.
      */
-
-    /** The message of this Commit. */
     private String message;
     private Date date;
     private String parent;
@@ -31,6 +29,7 @@ public class Commit implements Serializable {
     private String uid;
     private HashMap<String, String> map2File;
 
+    /** The message of this Commit. */
 
     public Commit(String msg, String parent, String secondParent) {
         this.message = msg;
@@ -44,14 +43,20 @@ public class Commit implements Serializable {
             this.secondParent = secondParent;
             this.map2File = Index.commitIndex();
         }
-        this.uid = sha1(getMessage() + getDate().toString() + getParent());
+        this.uid = sha1(getMessage() + getDate().toString() + getParent() + getSecondParent());
     }
 
+    /** create a commit and return the file **/
     public static File createCommit(String msg, String parent, String secondParent) {
         Commit commit = new Commit(msg, parent, secondParent);
-        File commitFile = Repository.makeObject(commit.getUid());
+        File commitFile = Repository.makeCommit(commit.getUid());
         writeObject(commitFile, commit);
         return commitFile;
+    }
+
+    /** first commit **/
+    public static File createFirstCommit() {
+        return createCommit("initial commit", null, null);
     }
 
     public static boolean inCurrentCommit(String fileName) {
@@ -59,7 +64,7 @@ public class Commit implements Serializable {
         return currentCommit.getMap2File().containsKey(fileName);
     }
 
-    public void logprint() {
+    public void logPrint() {
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy Z", Locale.ENGLISH);
         System.out.println("===");
         System.out.println("commit " + this.getUid());
@@ -76,10 +81,6 @@ public class Commit implements Serializable {
 
     public String getShort7Uid() {
         return getUid().substring(0, 7);
-    }
-
-    public String getShort6Uid() {
-        return getUid().substring(0, 6);
     }
 
     public String getSecondParent() {
@@ -106,5 +107,4 @@ public class Commit implements Serializable {
         return uid;
     }
 
-    /* TODO: fill in the rest of this class. */
 }

@@ -28,7 +28,7 @@ public class Index implements Serializable {
                 continue;
             }
             Blobs b = new Blobs(file);
-            if (Repository.findObject(b.getUid())) {
+            if (Repository.isBlobExists(b.getUid())) {
                 i.getRemoveIndex().remove(s);
             }
         }
