@@ -77,6 +77,13 @@ public class GitletUtils {
         checkUntrack(branch);
         Commit commit = branch.getCommit();
         HashMap<String, String> map2File = commit.getMap2File();
+        List<String> fileList = Utils.plainFilenamesIn(Repository.CWD);
+        for (String fileName : fileList) {
+            if (!map2File.keySet().contains(fileName)) {
+                File file = Utils.join(Repository.CWD, fileName);
+                Utils.restrictedDelete(file);
+            }
+        }
         for (String blobName : map2File.keySet()) {
             Blobs blob = Repository.findBlob(map2File.get(blobName));
             File targetFile = Utils.join(Repository.CWD, blobName);
@@ -146,6 +153,6 @@ public class GitletUtils {
     }
 
     public static void removeBranch(String branchName) {
-
+        Branch.removeBranch(branchName);
     }
 }
