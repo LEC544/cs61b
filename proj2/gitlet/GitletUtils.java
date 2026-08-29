@@ -53,8 +53,8 @@ public class GitletUtils {
         String fileName = blobs.getName();
         File file = Utils.join(Repository.CWD, fileName);
         if (file.exists() & !isTrucked(file)) {
-            MainMethods.exit("There is an untracked file in the way; " +
-                             "delete it, or add and commit it first.");
+            MainMethods.exit("There is an untracked file in the way; "
+                             + "delete it, or add and commit it first.");
         }
     }
 
@@ -89,7 +89,6 @@ public class GitletUtils {
         File blobFile = Ref.returnHeadCommit();
         Commit commit = Utils.readObject(blobFile, Commit.class);
         Blobs blob = Repository.findBlob(commit.getMap2File().get(fileName));
-        checkUntrack(blob);
         File file = Utils.join(Repository.CWD, fileName);
         Utils.writeContents(file, blob.getContent());
     }
@@ -98,7 +97,6 @@ public class GitletUtils {
         Commit targetCommit = Repository.findCommit(commitName);
         String blobId = targetCommit.getMap2File().get(fileName);
         Blobs targetBlob = Repository.findBlob(blobId);
-        checkUntrack(targetBlob);
         File targetFile = Utils.join(Repository.CWD, fileName);
         Utils.writeContents(targetFile, targetBlob.getContent());
     }
