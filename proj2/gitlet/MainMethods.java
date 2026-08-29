@@ -42,7 +42,7 @@ public class MainMethods {
     public static void init(String[] args) {
         shouldNotInited();
         correctArgumentNumber(1, args.length);
-        gitletUtils.init();
+        GitletUtils.init();
     }
 
     /**add the file to index**/
@@ -50,7 +50,7 @@ public class MainMethods {
         shouldInited();
         correctArgumentNumber(2, args.length);
         String fileName = args[1];
-        gitletUtils.addFile(fileName);
+        GitletUtils.addFile(fileName);
     }
 
     /**remove the file in index if the file is added or remove
@@ -60,7 +60,7 @@ public class MainMethods {
         shouldInited();
         correctArgumentNumber(2, args.length);
         String fileName = args[1];
-        gitletUtils.rmFile(fileName);
+        GitletUtils.rmFile(fileName);
     }
 
     /**commit**/
@@ -74,7 +74,7 @@ public class MainMethods {
             exit("No changes added to the commit.");
         }
         String msg = args[1];
-        gitletUtils.commit(msg);
+        GitletUtils.commit(msg);
     }
 
     public static void checkout(String[] args) {
@@ -84,7 +84,7 @@ public class MainMethods {
             case 2:
                 // checkout branch
                 String branchName = args[1];
-                gitletUtils.checkoutBranch(branchName);
+                GitletUtils.checkoutBranch(branchName);
                 break;
             case 3:
                 // checkout file
@@ -92,7 +92,7 @@ public class MainMethods {
                     exit("Incorrect operands.");
                 }
                 String fileName = args[2];
-                gitletUtils.checkoutFile(fileName);
+                GitletUtils.checkoutFile(fileName);
                 break;
             case 4:
                 // checkout commit file
@@ -101,7 +101,11 @@ public class MainMethods {
                 }
                 String commitName = args[1];
                 String target = args[3];
-                gitletUtils.checkoutFileInCommit(commitName, target);
+                GitletUtils.checkoutFileInCommit(commitName, target);
+                break;
+            default:
+                /**this is impossible because the length of the
+                 * length of the args can only be 2, 3 or 4**/
                 break;
         }
     }
@@ -109,12 +113,18 @@ public class MainMethods {
     public static void log(String[] args) {
         shouldInited();
         correctArgumentNumber(1, args.length);
-        gitletUtils.printLog();
+        GitletUtils.printLog();
     }
 
     public static void status(String[] args) {
         shouldInited();
         correctArgumentNumber(1, args.length);
-        gitletUtils.printStatus();
+        GitletUtils.printStatus();
+    }
+
+    public static void globalLog(String[] args) {
+        shouldInited();
+        correctArgumentNumber(1, args.length);
+        GitletUtils.printGlobalLog();
     }
 }

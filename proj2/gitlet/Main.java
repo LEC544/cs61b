@@ -38,6 +38,7 @@ public class Main {
                 status(args);
                 break;
             case "global-log":
+                globalLog(args);
                 break;
             default:
                 exit("No command with that name exists.");

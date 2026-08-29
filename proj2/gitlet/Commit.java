@@ -65,7 +65,8 @@ public class Commit implements Serializable {
     }
 
     public void logPrint() {
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy Z", Locale.ENGLISH);
+        SimpleDateFormat formatter =
+                new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy Z", Locale.ENGLISH);
         System.out.println("===");
         System.out.println("commit " + this.getUid());
         if (!(this.getSecondParent() == null)) {

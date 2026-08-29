@@ -2,8 +2,9 @@ package gitlet;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 
-public class gitletUtils {
+public class GitletUtils {
     public static void init() {
         Repository.createRepository();
         Index.initIndex();
@@ -13,7 +14,7 @@ public class gitletUtils {
     }
 
     public static void addFile(String fileName) {
-        if(!Repository.isFileExists(fileName)) {
+        if (!Repository.isFileExists(fileName)) {
             MainMethods.exit("File does not exist.");
         }
         Blobs blob = new Blobs(fileName);
@@ -56,13 +57,16 @@ public class gitletUtils {
 
     public static void checkoutFile(String fileName) {
         File file = Utils.join(Repository.CWD, fileName);
-        File BlobFile = Ref.returnHeadCommit();
-        Commit c = Utils.readObject(BlobFile, Commit.class);
-        Blobs b = Repository.findBlob(c.getMap2File().get(fileName));
-        Utils.writeContents(file, b.getContent());
+        File Blobfile = Ref.returnHeadCommit();
+        Commit commit = Utils.readObject(Blobfile, Commit.class);
+        Blobs blob = Repository.findBlob(commit.getMap2File().get(fileName));
+        Utils.writeContents(file, blob.getContent());
     }
 
     public static void checkoutFileInCommit(String commitName, String fileName) {
+        if (!Repository.isFileExists(fileName)) {
+            MainMethods.exit("File does not exist in that commit.");
+        }
         Commit targetCommit = Repository.findCommit(commitName);
         String blobId = targetCommit.getMap2File().get(fileName);
         Blobs targetBlob = Repository.findBlob(blobId);
@@ -82,5 +86,15 @@ public class gitletUtils {
     public static void printStatus() {
         Branch.printBranch();
         Index.printIndex();
+    }
+
+    public static void printGlobalLog() {
+        List<String> commitList = Utils.plainFilenamesIn(Repository.COMMIT);
+        for (String commitName : commitList) {
+            File commitFile = Utils.join(Repository.COMMIT, commitName);
+            Commit commit = Utils.readObject(commitFile, Commit.class);
+            System.out.println("===");
+            System.out.println("commit " + commit.getUid());
+        }
     }
 }
