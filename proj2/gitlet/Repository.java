@@ -84,7 +84,7 @@ public class Repository {
     public static Branch findBranch(String branchName) {
         File branchFile = join(BRANCH, branchName);
         if (!branchFile.exists()) {
-            MainMethods.exit("No branch with that name exists.");
+            MainMethods.exit("No such branch exists.");
         }
         Branch branch = readObject(branchFile, Branch.class);
         return branch;
