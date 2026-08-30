@@ -148,4 +148,11 @@ public class MainMethods {
         String branchName = args[1];
         GitletUtils.removeBranch(branchName);
     }
+
+    public static void reset(String[] args) {
+        shouldInited();
+        correctArgumentNumber(2, args.length);
+        String commitId = args[1];
+        GitletUtils.resetCommit(commitId);
+    }
 }

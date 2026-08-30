@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import static gitlet.Utils.*;
@@ -62,6 +63,22 @@ public class Commit implements Serializable {
     public static boolean inCurrentCommit(String fileName) {
         Commit currentCommit = readObject(Ref.returnHeadCommit(), Commit.class);
         return currentCommit.getMap2File().containsKey(fileName);
+    }
+
+    public void replace() {
+        HashMap<String, String> map2File = this.getMap2File();
+        List<String> fileList = Utils.plainFilenamesIn(Repository.CWD);
+        for (String fileName : fileList) {
+            if (!map2File.containsKey(fileName)) {
+                File file = Utils.join(Repository.CWD, fileName);
+                Utils.restrictedDelete(file);
+            }
+        }
+        for (String blobName : map2File.keySet()) {
+            Blobs blob = Repository.findBlob(map2File.get(blobName));
+            File targetFile = Utils.join(Repository.CWD, blobName);
+            Utils.writeContents(targetFile, blob.getContent());
+        }
     }
 
     public void logPrint() {

@@ -1,12 +1,28 @@
 package gitlet;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 
 public class GitletUtils {
-    private static final int ShortCommitID = 8;
-    private static final int LongCommitID = 40;
+    private static final int SHORTCOMMITID = 8;
+    private static final int LONGCOMMITID = 40;
+
+    private static String getCommitID(String commitID) {
+        String realCommitId = "";
+        if (commitID.length() == LONGCOMMITID) {
+            realCommitId = commitID;
+        } else if (commitID.length() == SHORTCOMMITID) {
+            List<String> commitList = Utils.plainFilenamesIn(Repository.COMMIT);
+            for (String commit : commitList) {
+                if (commit.substring(0, 8).equals(commitID)) {
+                    realCommitId = commit;
+                }
+            }
+        } else {
+            realCommitId = "";
+        }
+        return realCommitId;
+    }
 
     public static void init() {
         Repository.createRepository();
@@ -63,6 +79,10 @@ public class GitletUtils {
 
     public static void checkUntrack(Branch branch) {
         Commit commit = branch.getCommit();
+        checkUntrack(commit);
+    }
+
+    public static void checkUntrack(Commit commit) {
         for (String fileName : commit.getMap2File().keySet()) {
             File file = Utils.join(Repository.CWD, fileName);
             if (file.exists()) {
@@ -79,19 +99,7 @@ public class GitletUtils {
         Branch branch = Repository.findBranch(branchName);
         checkUntrack(branch);
         Commit commit = branch.getCommit();
-        HashMap<String, String> map2File = commit.getMap2File();
-        List<String> fileList = Utils.plainFilenamesIn(Repository.CWD);
-        for (String fileName : fileList) {
-            if (!map2File.keySet().contains(fileName)) {
-                File file = Utils.join(Repository.CWD, fileName);
-                Utils.restrictedDelete(file);
-            }
-        }
-        for (String blobName : map2File.keySet()) {
-            Blobs blob = Repository.findBlob(map2File.get(blobName));
-            File targetFile = Utils.join(Repository.CWD, blobName);
-            Utils.writeContents(targetFile, blob.getContent());
-        }
+        commit.replace();
         Ref.changeHeadRef(Utils.join(Repository.BRANCH, branchName));
     }
 
@@ -104,18 +112,7 @@ public class GitletUtils {
     }
 
     public static void checkoutFileInCommit(String commitName, String fileName) {
-        String realCommitName = "";
-        if (commitName.length() == LongCommitID) {
-            realCommitName = commitName;
-        }
-        if (commitName.length() == ShortCommitID) {
-            List<String> commitList = Utils.plainFilenamesIn(Repository.COMMIT);
-            for (String commit : commitList) {
-                if (commit.substring(0, 8).equals(commitName)) {
-                    realCommitName = commit;
-                }
-            }
-        }
+        String realCommitName = getCommitID(commitName);
         Commit targetCommit = Repository.findCommit(realCommitName);
         String blobId = targetCommit.getMap2File().get(fileName);
         Blobs targetBlob = Repository.findBlob(blobId);
@@ -169,5 +166,14 @@ public class GitletUtils {
 
     public static void removeBranch(String branchName) {
         Branch.removeBranch(branchName);
+    }
+
+    public static void resetCommit(String commitId) {
+        String realCommit = getCommitID(commitId);
+        Commit commit = Repository.findCommit(realCommit);
+        File commitFile = Utils.join(Repository.COMMIT, realCommit);
+        checkUntrack(commit);
+        commit.replace();
+        Branch.branchRepoint(Ref.returnHeadBranch(), commitFile);
     }
 }
