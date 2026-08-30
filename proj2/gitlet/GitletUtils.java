@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GitletUtils {
-    private static final int shortCommitID = 7;
-    private static final int longCommitID = 40;
+    private static final int ShortCommitID = 8;
+    private static final int LongCommitID = 40;
 
     public static void init() {
         Repository.createRepository();
@@ -105,13 +105,13 @@ public class GitletUtils {
 
     public static void checkoutFileInCommit(String commitName, String fileName) {
         String realCommitName = "";
-        if (commitName.length() == longCommitID) {
+        if (commitName.length() == LongCommitID) {
             realCommitName = commitName;
         }
-        if (commitName.length() == shortCommitID) {
+        if (commitName.length() == ShortCommitID) {
             List<String> commitList = Utils.plainFilenamesIn(Repository.COMMIT);
             for (String commit : commitList) {
-                if (commit.substring(0, 7).equals(commitName)) {
+                if (commit.substring(0, 8).equals(commitName)) {
                     realCommitName = commit;
                 }
             }
