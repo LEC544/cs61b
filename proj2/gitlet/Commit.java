@@ -66,16 +66,15 @@ public class Commit implements Serializable {
     }
 
     public void replace() {
-        HashMap<String, String> map2File = this.getMap2File();
         List<String> fileList = Utils.plainFilenamesIn(Repository.CWD);
         for (String fileName : fileList) {
-            if (!map2File.containsKey(fileName)) {
+            if (!this.map2File.containsKey(fileName)) {
                 File file = Utils.join(Repository.CWD, fileName);
                 Utils.restrictedDelete(file);
             }
         }
-        for (String blobName : map2File.keySet()) {
-            Blobs blob = Repository.findBlob(map2File.get(blobName));
+        for (String blobName : this.map2File.keySet()) {
+            Blobs blob = Repository.findBlob(this.map2File.get(blobName));
             File targetFile = Utils.join(Repository.CWD, blobName);
             Utils.writeContents(targetFile, blob.getContent());
         }

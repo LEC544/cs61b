@@ -175,5 +175,6 @@ public class GitletUtils {
         checkUntrack(commit);
         commit.replace();
         Branch.branchRepoint(Ref.returnHeadBranch(), commitFile);
+        Index.initIndex();
     }
 }
