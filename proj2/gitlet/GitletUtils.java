@@ -41,7 +41,7 @@ public class GitletUtils {
         if (Repository.isBlobExists(blob.getUid())) {
             String blobUid = blob.getUid();
             String currentUid = Ref.returnHeadCommit().getMap2File().get(fileName);
-            if (!currentUid.equals(blobUid)) {
+            if (currentUid == null | !currentUid.equals(blobUid)) {
                 Index.add(fileName, blobUid);
             }
             return;
