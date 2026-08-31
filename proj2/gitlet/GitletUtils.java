@@ -246,7 +246,7 @@ public class GitletUtils {
             if (!current.equals(branch)
                     & !branch.equals(split)
                     & !split.equals(current)) {
-                confilt(current, branch, file);
+                conflict(current, branch, file);
             } else if (current.equals(branch)) {
                 return;
             } else if (branch.equals(split)) {
@@ -268,7 +268,7 @@ public class GitletUtils {
                     if (branch.equals(split)) {
                         return;
                     } else {
-                        confilt(current, branch, file);
+                        conflict(current, branch, file);
                     }
                 }
             } else if (branch == null) {
@@ -278,20 +278,20 @@ public class GitletUtils {
                     if (split.equals(current)) {
                         rmFile(file);
                     } else {
-                        confilt(current, branch, file);
+                        conflict(current, branch, file);
                     }
                 }
             } else {
                 if (current.equals(branch)) {
                     return;
                 } else {
-                    confilt(current, branch, file);
+                    conflict(current, branch, file);
                 }
             }
         }
     }
 
-    private static void confilt(String current, String branch, String file) {
+    private static void conflict(String current, String branch, String file) {
         Utils.message("Encountered a merge conflict.");
         String currentContent = "";
         String branchContent = "";
@@ -303,11 +303,11 @@ public class GitletUtils {
             Blobs blob = Repository.findBlob(branch);
             branchContent = blob.getContent();
         }
-        String fileContent = "<<<<<<< HEAD"
+        String fileContent = "<<<<<<< HEAD\n"
                 + currentContent
-                + "======="
+                + "\n=======\n"
                 + branchContent
-                + ">>>>>>>";
+                + "\n>>>>>>>";
         Utils.writeContents(Utils.join(Repository.CWD, file), fileContent);
         addFile(file);
     }
