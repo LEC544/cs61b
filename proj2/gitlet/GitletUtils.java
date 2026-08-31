@@ -63,6 +63,16 @@ public class GitletUtils {
         Branch.branchRepoint(headBranch, commitFile);
     }
 
+    public static void mergeCommit(String branchName) {
+        String firstUid = Ref.returnHeadCommit().getUid();
+        String secondeUid = Repository.findBranch(branchName).getCommit().getUid();
+        String currentName = Ref.returnHeadBranchFile().getName();
+        String msg = "Merged " + branchName + " into " + currentName + ".";
+        File commitFile = Commit.createCommit(msg, firstUid, secondeUid);
+        File headBranch = Ref.returnHeadBranchFile();
+        Branch.branchRepoint(headBranch, commitFile);
+    }
+
     public static boolean isTrucked(File file) {
         Commit currentCommit = Ref.returnHeadCommit();
         return currentCommit.getMap2File().containsKey(file.getName());
@@ -192,6 +202,22 @@ public class GitletUtils {
         Commit branchCommit = branch.getCommit();
         Commit currentCommit = Ref.returnHeadCommit();
         Commit splitPoint = Commit.findAncestor(branchCommit, currentCommit);
+        List<String> fileList = Utils.plainFilenamesIn(Repository.CWD);
+        for (String fileName : fileList) {
+            File file = Utils.join(Repository.CWD, fileName);
+            if (!isTrucked(file)) {
+                String branchBlobUid = branchCommit.getMap2File().get(fileName);
+                String spiltPointBlobUid = splitPoint.getMap2File().get(fileName);
+                if (branchBlobUid == null) {
+                    continue;
+                } else if (branchBlobUid.equals(spiltPointBlobUid)) {
+                    continue;
+                } else {
+                    MainMethods.exit("There is an untracked file in the way;"
+                                     + " delete it, or add and commit it first.");
+                }
+            }
+        }
         if (splitPoint == null) {
             MainMethods.exit("can't find the ancestor commit");
         }
@@ -201,20 +227,88 @@ public class GitletUtils {
             checkoutBranch(branchName);
             Utils.message("Current branch fast-forwarded.");
         } else {
-            List<String> fileList = Utils.plainFilenamesIn(Repository.CWD);
-            for (String fileName : fileList) {
-                File file = Utils.join(Repository.CWD, fileName);
-                if (!isTrucked(file)) {
-
-                }
-            }
             HashSet<String> totalFileName = new HashSet<>();
             totalFileName.addAll(currentCommit.getMap2File().keySet());
             totalFileName.addAll(branchCommit.getMap2File().keySet());
             totalFileName.addAll(splitPoint.getMap2File().keySet());
             for (String file : totalFileName) {
+                String currentBlobUid = currentCommit.getMap2File().get(file);
+                String branchBlobUid = currentCommit.getMap2File().get(file);
+                String splitBlobUid = currentCommit.getMap2File().get(file);
+                mergeWithUid(currentBlobUid, branchBlobUid, splitBlobUid, file);
+            }
+            mergeCommit(branchName);
+        }
+    }
 
+    private static void mergeWithUid(String current, String branch, String split, String file) {
+        if (current != null & branch != null & split != null) {
+            if (!current.equals(branch)
+                    & !branch.equals(split)
+                    & !split.equals(current)) {
+                confilt(current, branch, file);
+            } else if (current.equals(branch)) {
+                return;
+            } else if (branch.equals(split)) {
+                return;
+            } else {
+                String content = Repository.findBlob(branch).getContent();
+                Utils.writeContents(Utils.join(Repository.CWD, file), content);
+                addFile(file);
+            }
+        } else {
+            if (current == null) {
+                if (branch == null) {
+                    return;
+                } else if (split == null) {
+                    String content = Repository.findBlob(branch).getContent();
+                    Utils.writeContents(Utils.join(Repository.CWD, file), content);
+                    addFile(file);
+                } else {
+                    if (branch.equals(split)) {
+                        return;
+                    } else {
+                        confilt(current, branch, file);
+                    }
+                }
+            } else if (branch == null) {
+                if (split == null) {
+                    return;
+                } else {
+                    if (split.equals(current)) {
+                        rmFile(file);
+                    } else {
+                        confilt(current, branch, file);
+                    }
+                }
+            } else {
+                if (current.equals(branch)) {
+                    return;
+                } else {
+                    confilt(current, branch, file);
+                }
             }
         }
+    }
+
+    private static void confilt(String current, String branch, String file) {
+        Utils.message("Encountered a merge conflict.");
+        String currentContent = "";
+        String branchContent = "";
+        if (current != null) {
+            Blobs blob = Repository.findBlob(current);
+            currentContent = blob.getContent();
+        }
+        if (branch != null) {
+            Blobs blob = Repository.findBlob(branch);
+            branchContent = blob.getContent();
+        }
+        String fileContent = "<<<<<<< HEAD"
+                + currentContent
+                + "======="
+                + branchContent
+                + ">>>>>>>";
+        Utils.writeContents(Utils.join(Repository.CWD, file), fileContent);
+        addFile(file);
     }
 }
