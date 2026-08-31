@@ -4,10 +4,7 @@ package gitlet;
 import java.io.File;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import static gitlet.Utils.*;
 
@@ -61,7 +58,7 @@ public class Commit implements Serializable {
     }
 
     public static boolean inCurrentCommit(String fileName) {
-        Commit currentCommit = readObject(Ref.returnHeadCommit(), Commit.class);
+        Commit currentCommit = Ref.returnHeadCommit();
         return currentCommit.getMap2File().containsKey(fileName);
     }
 
@@ -78,6 +75,36 @@ public class Commit implements Serializable {
             File targetFile = Utils.join(Repository.CWD, blobName);
             Utils.writeContents(targetFile, blob.getContent());
         }
+    }
+
+    public static Commit findAncestor(Commit current, Commit given) {
+        HashSet<String> currentAncestor = new HashSet<>();
+        Deque<Commit> ancestorQue = new ArrayDeque<>();
+        ancestorQue.addLast(current);
+        while (!ancestorQue.isEmpty()) {
+            Commit sentinel = ancestorQue.removeFirst();
+            currentAncestor.add(sentinel.getUid());
+            if (sentinel.getParent() != null) {
+                ancestorQue.addLast(Repository.findCommit(sentinel.getParent()));
+            }
+            if (sentinel.getSecondParent() != null) {
+                ancestorQue.addLast(Repository.findCommit(sentinel.getSecondParent()));
+            }
+        }
+        ancestorQue.addLast(given);
+        while (!ancestorQue.isEmpty()) {
+            Commit sentinel = ancestorQue.removeFirst();
+            if (currentAncestor.contains(sentinel.getUid())) {
+                return sentinel;
+            }
+            if (sentinel.getParent() != null) {
+                ancestorQue.addLast(Repository.findCommit(sentinel.getParent()));
+            }
+            if (sentinel.getSecondParent() != null) {
+                ancestorQue.addLast(Repository.findCommit(sentinel.getSecondParent()));
+            }
+        }
+        return null;
     }
 
     public void logPrint() {

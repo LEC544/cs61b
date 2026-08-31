@@ -59,7 +59,7 @@ public class Index implements Serializable {
 
     public static HashMap<String, String> commitIndex() {
         Index i = readObject(Repository.INDEX, Index.class);
-        Commit parent = readObject(Ref.returnHeadCommit(), Commit.class);
+        Commit parent = Ref.returnHeadCommit();
         HashMap<String, String> hashMap = parent.getMap2File();
         for (String s: i.getAddIndex().keySet()) {
             hashMap.put(s, i.addIndex.get(s));

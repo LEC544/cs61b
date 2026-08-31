@@ -24,7 +24,7 @@ public class Branch implements Serializable {
     }
 
     public static void removeBranch(String branchName) {
-        String currentBranch = Ref.returnHeadBranch().getName();
+        String currentBranch = Ref.returnHeadBranchFile().getName();
         if (currentBranch.equals(branchName)) {
             MainMethods.exit("Cannot remove the current branch.");
         }
@@ -43,7 +43,7 @@ public class Branch implements Serializable {
     public static void printBranch() {
         System.out.println("=== Branches ===");
         List<String> branchList = Utils.plainFilenamesIn(Repository.BRANCH);
-        String headBranchName = Ref.returnHeadBranch().getName();
+        String headBranchName = Ref.returnHeadBranchFile().getName();
         System.out.println("*" + headBranchName);
         for (String branchName : branchList) {
             if (!branchName.equals(headBranchName)) {

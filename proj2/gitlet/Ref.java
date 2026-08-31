@@ -20,16 +20,24 @@ public class Ref implements Serializable {
         writeObject(Repository.HEAD, ref);
     }
 
-    public static File returnHeadCommit() {
+    public static File returnHeadCommitFile() {
         Ref ref = readObject(Repository.HEAD, Ref.class);
         Branch B = readObject(ref.getPointer(), Branch.class);
         ref = B.getRef2Commit();
         return ref.getPointer();
     }
 
-    public static File returnHeadBranch() {
+    public static Commit returnHeadCommit() {
+        return readObject(returnHeadCommitFile(), Commit.class);
+    }
+
+    public static File returnHeadBranchFile() {
         Ref ref = readObject(Repository.HEAD, Ref.class);
         return ref.getPointer();
+    }
+
+    public static Branch returnHeadBranch() {
+        return readObject(returnHeadBranchFile(), Branch.class);
     }
 
     public File getPointer() {

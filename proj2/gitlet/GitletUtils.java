@@ -1,6 +1,7 @@
 package gitlet;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
 
 public class GitletUtils {
@@ -55,17 +56,16 @@ public class GitletUtils {
     }
 
     public static void commit(String msg) {
-        File headCommitFile = Ref.returnHeadCommit();
+        File headCommitFile = Ref.returnHeadCommitFile();
         String parentUid = Utils.readObject(headCommitFile, Commit.class).getUid();
         File commitFile = Commit.createCommit(msg, parentUid, null);
-        File headBranch = Ref.returnHeadBranch();
+        File headBranch = Ref.returnHeadBranchFile();
         Branch.branchRepoint(headBranch, commitFile);
     }
 
     public static boolean isTrucked(File file) {
-        Blobs blob = new Blobs(file);
-        File blobFile = Utils.join(Repository.BLOB, blob.getUid());
-        return blobFile.exists();
+        Commit currentCommit = Ref.returnHeadCommit();
+        return currentCommit.getMap2File().containsKey(file.getName());
     }
 
     public static void checkUntrack(Blobs blobs) {
@@ -93,7 +93,7 @@ public class GitletUtils {
     }
 
     public static void checkoutBranch(String branchName) {
-        if (Ref.returnHeadBranch().getName().equals(branchName)) {
+        if (Ref.returnHeadBranchFile().getName().equals(branchName)) {
             MainMethods.exit("No need to checkout the current branch.");
         }
         Branch branch = Repository.findBranch(branchName);
@@ -104,7 +104,7 @@ public class GitletUtils {
     }
 
     public static void checkoutFile(String fileName) {
-        File blobFile = Ref.returnHeadCommit();
+        File blobFile = Ref.returnHeadCommitFile();
         Commit commit = Utils.readObject(blobFile, Commit.class);
         Blobs blob = Repository.findBlob(commit.getMap2File().get(fileName));
         File file = Utils.join(Repository.CWD, fileName);
@@ -121,7 +121,7 @@ public class GitletUtils {
     }
 
     public static void printLog() {
-        Commit commit = Utils.readObject(Ref.returnHeadCommit(), Commit.class);
+        Commit commit = Ref.returnHeadCommit();
         while (commit.getParent() != null) {
             commit.logPrint();
             commit = Repository.findCommit(commit.getParent());
@@ -160,7 +160,7 @@ public class GitletUtils {
     }
 
     public static void createBranch(String branchName) {
-        File commitFile = Ref.returnHeadCommit();
+        File commitFile = Ref.returnHeadCommitFile();
         Branch.createBranch(branchName, commitFile);
     }
 
@@ -174,7 +174,47 @@ public class GitletUtils {
         File commitFile = Utils.join(Repository.COMMIT, realCommit);
         checkUntrack(commit);
         commit.replace();
-        Branch.branchRepoint(Ref.returnHeadBranch(), commitFile);
+        Branch.branchRepoint(Ref.returnHeadBranchFile(), commitFile);
         Index.initIndex();
+    }
+
+    public static void mergeBranch(String branchName) {
+        if (Index.isChanged()) {
+            MainMethods.exit("You have uncommitted changes.");
+        }
+        if (!Utils.join(Repository.BRANCH, branchName).exists()) {
+            MainMethods.exit("A branch with that name does not exist.");
+        }
+        if (Ref.returnHeadBranchFile().getName().equals(branchName)) {
+            MainMethods.exit("Cannot merge a branch with itself.");
+        }
+        Branch branch = Repository.findBranch(branchName);
+        Commit branchCommit = branch.getCommit();
+        Commit currentCommit = Ref.returnHeadCommit();
+        Commit splitPoint = Commit.findAncestor(branchCommit, currentCommit);
+        if (splitPoint == null) {
+            MainMethods.exit("can't find the ancestor commit");
+        }
+        if (splitPoint.getUid().equals(branchCommit.getUid())) {
+            Utils.message("Given branch is an ancestor of the current branch.");
+        } else if (splitPoint.getUid().equals(currentCommit.getUid())) {
+            checkoutBranch(branchName);
+            Utils.message("Current branch fast-forwarded.");
+        } else {
+            List<String> fileList = Utils.plainFilenamesIn(Repository.CWD);
+            for (String fileName : fileList) {
+                File file = Utils.join(Repository.CWD, fileName);
+                if (!isTrucked(file)) {
+
+                }
+            }
+            HashSet<String> totalFileName = new HashSet<>();
+            totalFileName.addAll(currentCommit.getMap2File().keySet());
+            totalFileName.addAll(branchCommit.getMap2File().keySet());
+            totalFileName.addAll(splitPoint.getMap2File().keySet());
+            for (String file : totalFileName) {
+
+            }
+        }
     }
 }

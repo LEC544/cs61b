@@ -49,9 +49,12 @@ public class Main {
             case "rm-branch":
                 rmBranch(args);
                 break;
-            case "reset" :
+            case "reset":
                 reset(args);
                 break;
+//            case "merge":
+//                merge(args);
+//                break;
             default:
                 exit("No command with that name exists.");
         }

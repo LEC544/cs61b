@@ -155,4 +155,11 @@ public class MainMethods {
         String commitId = args[1];
         GitletUtils.resetCommit(commitId);
     }
+
+    public static void merge(String[] args) {
+        shouldInited();
+        correctArgumentNumber(2, args.length);
+        String branchName = args[1];
+        GitletUtils.mergeBranch(branchName);
+    }
 }
