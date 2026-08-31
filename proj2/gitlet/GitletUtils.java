@@ -293,8 +293,8 @@ public class GitletUtils {
 
     private static void conflict(String current, String branch, String file) {
         Utils.message("Encountered a merge conflict.");
-        String currentContent = "";
-        String branchContent = "";
+        String currentContent = "\n";
+        String branchContent = "\n";
         if (current != null) {
             Blobs blob = Repository.findBlob(current);
             currentContent = blob.getContent();
@@ -305,9 +305,9 @@ public class GitletUtils {
         }
         String fileContent = "<<<<<<< HEAD\n"
                 + currentContent
-                + "\n=======\n"
+                + "=======\n"
                 + branchContent
-                + "\n>>>>>>>";
+                + ">>>>>>>";
         Utils.writeContents(Utils.join(Repository.CWD, file), fileContent);
         addFile(file);
     }
