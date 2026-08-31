@@ -1,5 +1,7 @@
 package gitlet;
 
+import jh61b.junit.In;
+
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
@@ -39,6 +41,7 @@ public class GitletUtils {
         }
         Blobs blob = new Blobs(fileName);
         if (Repository.isBlobExists(blob.getUid())) {
+            Index.add(fileName, blob.getUid());
             return;
         }
         String blobFile = blob.makeBlob();
@@ -293,8 +296,8 @@ public class GitletUtils {
 
     private static void conflict(String current, String branch, String file) {
         Utils.message("Encountered a merge conflict.");
-        String currentContent = "\n";
-        String branchContent = "\n";
+        String currentContent = "";
+        String branchContent = "";
         if (current != null) {
             Blobs blob = Repository.findBlob(current);
             currentContent = blob.getContent();
