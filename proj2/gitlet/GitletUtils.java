@@ -1,7 +1,5 @@
 package gitlet;
 
-import jh61b.junit.In;
-
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +39,11 @@ public class GitletUtils {
         }
         Blobs blob = new Blobs(fileName);
         if (Repository.isBlobExists(blob.getUid())) {
-            Index.add(fileName, blob.getUid());
+            String blobUid = blob.getUid();
+            String currentUid = Ref.returnHeadCommit().getMap2File().get(fileName);
+            if (!currentUid.equals(blobUid)) {
+                Index.add(fileName, blobUid);
+            }
             return;
         }
         String blobFile = blob.makeBlob();

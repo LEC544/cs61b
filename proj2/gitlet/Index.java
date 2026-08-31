@@ -37,6 +37,9 @@ public class Index implements Serializable {
 
     public static void add(String name, String blob) {
         Index i = readObject(Repository.INDEX, Index.class);
+        if (i.getRemoveIndex().contains(name)) {
+            i.getRemoveIndex().remove(name);
+        }
         i.addIndex.put(name, blob);
         writeObject(Repository.INDEX, i);
     }
