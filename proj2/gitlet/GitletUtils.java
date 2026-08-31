@@ -233,8 +233,8 @@ public class GitletUtils {
             totalFileName.addAll(splitPoint.getMap2File().keySet());
             for (String file : totalFileName) {
                 String currentBlobUid = currentCommit.getMap2File().get(file);
-                String branchBlobUid = currentCommit.getMap2File().get(file);
-                String splitBlobUid = currentCommit.getMap2File().get(file);
+                String branchBlobUid = branchCommit.getMap2File().get(file);
+                String splitBlobUid = splitPoint.getMap2File().get(file);
                 mergeWithUid(currentBlobUid, branchBlobUid, splitBlobUid, file);
             }
             mergeCommit(branchName);
