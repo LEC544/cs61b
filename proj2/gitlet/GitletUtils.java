@@ -201,7 +201,7 @@ public class GitletUtils {
         Branch branch = Repository.findBranch(branchName);
         Commit branchCommit = branch.getCommit();
         Commit currentCommit = Ref.returnHeadCommit();
-        Commit splitPoint = Commit.findAncestor(branchCommit, currentCommit);
+        Commit splitPoint = Commit.findAncestor(currentCommit, branchCommit);
         List<String> fileList = Utils.plainFilenamesIn(Repository.CWD);
         for (String fileName : fileList) {
             File file = Utils.join(Repository.CWD, fileName);
@@ -307,7 +307,7 @@ public class GitletUtils {
                 + currentContent
                 + "=======\n"
                 + branchContent
-                + ">>>>>>>";
+                + ">>>>>>>\n";
         Utils.writeContents(Utils.join(Repository.CWD, file), fileContent);
         addFile(file);
     }
